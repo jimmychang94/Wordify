@@ -71,4 +71,4 @@ User:
 
 ## Data Flow
 
-![Data Flow]()
+![Data Flow]("/Assets/WordifyDataFlow.PNG")
