@@ -8,6 +8,14 @@ TODO: Guide users through getting your code up and running on their own system. 
 3.	Latest releases
 4.	API references
 
+
+## Data Schema 
+![Data Schema](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifySchema.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
+
+
+## Wireframe
+![Wireframe](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifyWireframe.jpg&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
+
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
