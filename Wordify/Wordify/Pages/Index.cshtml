@@ -1,11 +1,13 @@
 ﻿@page
 @model IndexModel
+
+
 @{
     ViewData["Title"] = "Home page";
 }
 <h1>Upload an Image</h1>
-<form>
+<form method="post">
     <label ></label>
-    <input type="text" placeholder="Image Url"/>
+    <input type="text" asp-for="imageFilePath" placeholder="Image Url"/>
     <button type="submit">Upload</button>
 </form>
