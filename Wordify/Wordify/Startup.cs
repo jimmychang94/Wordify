@@ -6,24 +6,33 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wordify.Data;
+using Wordify.Services;
 
 namespace Wordify
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -32,7 +41,22 @@ namespace Wordify
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddMvc()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizeFolder("/Account/Manage");
+                    options.Conventions.AuthorizePage("/Account/Logout");
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
+
+            services.AddSingleton<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +75,7 @@ namespace Wordify
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
