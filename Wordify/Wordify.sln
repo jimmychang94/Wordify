@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordify", "Wordify\Wordify.csproj", "{74E0AB45-A2FB-405B-9BCD-D8794F74A058}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordify", "Wordify\Wordify.csproj", "{98A534D7-C369-4CEB-99B9-A3DD2C2577DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74E0AB45-A2FB-405B-9BCD-D8794F74A058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74E0AB45-A2FB-405B-9BCD-D8794F74A058}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74E0AB45-A2FB-405B-9BCD-D8794F74A058}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74E0AB45-A2FB-405B-9BCD-D8794F74A058}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98A534D7-C369-4CEB-99B9-A3DD2C2577DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98A534D7-C369-4CEB-99B9-A3DD2C2577DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98A534D7-C369-4CEB-99B9-A3DD2C2577DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98A534D7-C369-4CEB-99B9-A3DD2C2577DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EFBA28DC-B0B9-42CD-95BD-983F8B0B7D7B}
+		SolutionGuid = {D5338D87-5C97-4314-A9BF-EA66D590DDC7}
 	EndGlobalSection
 EndGlobal

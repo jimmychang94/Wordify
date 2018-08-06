@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Wordify.Pages
 {
-    public class PrivacyModel : PageModel
+    public class NoteModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }
