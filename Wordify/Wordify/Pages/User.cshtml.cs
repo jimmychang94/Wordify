@@ -9,6 +9,8 @@ namespace Wordify.Pages
 {
     public class UserModel : PageModel
     {
+        public string Notes { get; set; }
+
         public void OnGet()
         {
             
