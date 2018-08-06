@@ -24,6 +24,11 @@ namespace Wordify.Pages
         [BindProperty]
         public string imageFilePath { get; set; }
 
+        [BindProperty]
+        public string responseContent { get; set; }
+
+
+
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
             IConfiguration configuration)
         {
@@ -34,12 +39,15 @@ namespace Wordify.Pages
 
         public void OnGet()
         {
-
         }
+        
+
+
 
         public async void OnPost(string imageFilePath)
         {
             var user = await _userManager.GetUserAsync(User);
+
             if(System.IO.File.Exists(imageFilePath))
             {
                 ReadHandwrittenText(imageFilePath).Wait();
@@ -50,7 +58,10 @@ namespace Wordify.Pages
             }
         }
 
-        public static async Task ReadHandwrittenText(string imageFilePath)
+
+
+
+        public async Task ReadHandwrittenText(string imageFilePath)
         {
             try
             {
@@ -103,14 +114,17 @@ namespace Wordify.Pages
                     return;
                 }
 
-                // API request completed
-            
+                responseContent = JToken.Parse(contentString).ToString();
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
+
+
+
 
         public static byte[] GetImageAsByteArray(string imageFilePath)
         {

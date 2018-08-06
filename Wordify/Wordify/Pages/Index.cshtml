@@ -1,13 +1,28 @@
 ﻿@page
 @model IndexModel
 
-
 @{
     ViewData["Title"] = "Home page";
 }
+
 <h1>Upload an Image</h1>
-<form method="post">
-    <label ></label>
-    <input type="text" asp-for="imageFilePath" placeholder="Image Url"/>
-    <button type="submit">Upload</button>
+<form method="post" enctype="multipart/form-data">
+
+    <input type="text" id="inputUrl" asp-for="imageFilePath" placeholder="Image URL"/><br />
+    <span>-or-</span>
+
+    <input type="file" asp-for="imageFilePath" />
+    <br />
+
+    <button type="submit"> Upload </button>
+
+
+
 </form>
+
+@if (Model.responseContent != null)
+{ 
+    <section>
+        <p>@Model.responseContent</p>
+    </section>
+}
