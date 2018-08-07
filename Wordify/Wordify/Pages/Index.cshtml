@@ -21,8 +21,9 @@
 </form>
 
 @if (Model.responseContent != null)
-{ 
-    <section>
+{
+    @*<section>
         <p>@Model.responseContent</p>
-    </section>
+    </section>*@
+  <textarea rows="10" cols="50">@Model.responseString</textarea>
 }
