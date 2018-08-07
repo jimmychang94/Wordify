@@ -11,6 +11,8 @@ using Wordify.Data;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
+using Wordify.Data.json;
+using System.Text;
 
 namespace Wordify.Pages
 {
@@ -27,6 +29,8 @@ namespace Wordify.Pages
         [BindProperty]
         public string responseContent { get; set; }
 
+
+        public string responseString { get; set; }
 
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
@@ -115,6 +119,9 @@ namespace Wordify.Pages
                 }
 
                 responseContent = JToken.Parse(contentString).ToString();
+                RootObject ImageText = JsonParse(contentString);
+                List<Line> Lines = FilteredJson(ImageText);
+                responseString = TextString(Lines);
 
             }
             catch (Exception e)
@@ -123,7 +130,45 @@ namespace Wordify.Pages
             }
         }
 
+        public static RootObject JsonParse(string jsonString)
+        {           
+            //string json;
+            //using (StreamReader r = new StreamReader(jsonString))
+            //{
+            //    json = r.ReadToEnd();
+            //};
+            //Converts the JSON files data and puts it into a RootObject, which chains to the other classes  
+            // and allocates the data to the proper sections
+            RootObject ImageText = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(jsonString);
+            return ImageText;
+        }
 
+        //filter RootObject down to a list of lines.text
+        public static List<Line> FilteredJson(RootObject ImagePath)
+        {
+            Convertedjson displayJson = new Convertedjson();
+
+            var lines = from l in ImagePath.recognitionResult.lines
+                        where l.text != null
+                        select l;
+
+            List<Line> text = lines.ToList();      
+            return text;
+        }
+
+        public static string TextString( List<Line> text)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var item in text)
+            {
+                sb.AppendLine(item.text);
+            }
+
+            string returnString = sb.ToString();
+
+            return returnString;
+        }
 
 
         public static byte[] GetImageAsByteArray(string imageFilePath)
