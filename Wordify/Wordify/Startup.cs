@@ -56,6 +56,12 @@ namespace Wordify
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole(ApplicationRoles.Admin));
+                options.AddPolicy("MemberOnly", policy => policy.RequireRole(ApplicationRoles.Member));
+            });
+
             services.AddSingleton<IEmailSender, EmailSender>();
         }
 
