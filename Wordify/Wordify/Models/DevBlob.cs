@@ -3,6 +3,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Wordify.Models.Interfaces;
@@ -40,7 +41,7 @@ namespace Wordify.Models
         }
 
 
-        public async void Upload(Note newNote, string text, string imagePath)
+        public async void Upload(Note newNote, string text, byte[] byteData)
         {
             string blobName = Guid.NewGuid().ToString();
 
@@ -48,7 +49,7 @@ namespace Wordify.Models
             CloudBlockBlob blobImage = _Images.GetBlockBlobReference(blobName);
 
             await blobText.UploadTextAsync(text);
-            await blobImage.UploadFromFileAsync(imagePath);
+            await blobImage.UploadFromByteArrayAsync(byteData, 0, byteData.Length);
 
             newNote.BlobName = blobName;
         }

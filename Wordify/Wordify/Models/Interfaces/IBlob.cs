@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace Wordify.Models.Interfaces
     {
         void SetPermissions();
         //upload note(Note newNote, image file, text file) => return void
-        void Upload(Note newNote, string text, string imagePath);
+        void Upload(Note newNote, string text, byte[] byteData);
         //get image by blobName(blobName) => return image file
         Task<ICloudBlob> GetImage(string blobName);
         //get text by blobname(blobName) => return text file

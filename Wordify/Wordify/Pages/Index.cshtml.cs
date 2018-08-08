@@ -15,7 +15,12 @@ using Wordify.Data.json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Drawing;
+<<<<<<< HEAD
 using Wordify.Extensions;
+=======
+using Wordify.Models.Interfaces;
+using Wordify.Models;
+>>>>>>> Staging
 
 namespace Wordify.Pages
 {
@@ -23,6 +28,7 @@ namespace Wordify.Pages
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private  IBlob _blob;
 
         public static IConfiguration Configuration;
 
@@ -42,11 +48,12 @@ namespace Wordify.Pages
 
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IConfiguration configuration)
+            IConfiguration configuration, IBlob blob)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             Configuration = configuration;
+            _blob = blob;
         }
 
         public void OnGet()
@@ -138,11 +145,30 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
+<<<<<<< HEAD
                 if(_signInManager.IsSignedIn(User))
                 {
                     TempData["Test"] = $"Hi {User.Identity.Name}!";
                 }
                 ImageDisplayExtensions.DisplayImage(byteData);
+=======
+                using (var ms = new MemoryStream(byteData))
+                {
+                    Image image = Image.FromStream(ms);
+                    image.Save("wwwroot/test.PNG", System.Drawing.Imaging.ImageFormat.Png);
+                }
+
+                if(_signInManager.IsSignedIn(User))
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    Note note = new Note()
+                    {
+                        UserID = user.Id,
+                        Date = DateTime.Now
+                    };
+                    _blob.Upload(note, ResponseString, byteData);
+                }
+>>>>>>> Staging
             }
             catch (Exception e)
             {
