@@ -1,0 +1,48 @@
+﻿@page
+@model ProfileModel
+@{
+    ViewData["Title"] = "Profile Page";
+}
+
+<h1>Your Profile</h1>
+
+<form method="post">
+
+    <div class="form-group row">
+        <h5 class="col-sm-2 offset-sm-1"><label asp-for="UserName" class="col-form-label"></label></h5>
+        <div class="col-sm-9">
+            <input asp-for="UserName" readonly="readonly" class="form-control" value="@Model.UserName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <h5 class="col-sm-2 offset-sm-1"><label asp-for="FirstName" class="col-form-label"></label></h5>
+        <div class="col-sm-9">
+            <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <h5 class="col-sm-2 offset-sm-1"><label asp-for="LastName" class="col-form-label"></label></h5>
+        <div class="col-sm-9">
+            <input asp-for="LastName" class="form-control" value="@Model.LastName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <h5 class="col-sm-2 offset-sm-1"><label asp-for="Bio" class="col-form-label"></label></h5>
+        <div class="col-sm-9">
+            <input asp-for="Bio" class="form-control" value="@Model.Bio" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <h5 class="col-sm-2 offset-sm-1"><label asp-for="Email" class="col-form-label"></label></h5>
+        <div class="col-sm-9">
+            <input asp-for="Email" readonly="readonly" class="form-control" value="@Model.Email" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <input type="submit" class="btn btn-primary" value="Update User" />
+        </div>
+    </div>
+
+</form>

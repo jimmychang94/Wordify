@@ -1,8 +1,15 @@
 ﻿@page
 @model IndexModel
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Home page";
+}
+
+@if(SignInManager.IsSignedIn(User))
+{
+    <br />
+    <h4>Hello @User.Claims.First(c => c.Type == "FullName").Value</h4>
 }
 
 <h1>Upload an Image</h1>
@@ -15,10 +22,9 @@
     <br />
 
     <button type="submit"> Upload </button>
-
-
-
 </form>
+
+<p>@TempData["Test"]</p>
 
 @if (Model.ResponseContent != null)
 {
