@@ -55,9 +55,8 @@ namespace Wordify.Pages
 
 
 
-        public async void OnPost()
+        public void OnPost()
         {
-            var user = await _userManager.GetUserAsync(User);
             if (FormFile.Length > 0)
             {
                 ReadHandwrittenText(FormFile).Wait();
@@ -138,6 +137,10 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
+                if(_signInManager.IsSignedIn(User))
+                {
+                    TempData["Test"] = $"Hi {User.Identity.Name}!";
+                }
                 using (var ms = new MemoryStream(byteData))
                 {
                     Image image = Image.FromStream(ms);
