@@ -58,7 +58,7 @@ namespace Wordify.Pages
         
 
 
-
+        //take in the FormFile from the frontend and start off the process of sending it to the API
         public void OnPost()
         {
             if (FormFile.Length > 0)
@@ -81,9 +81,11 @@ namespace Wordify.Pages
             }
         }
 
-
-
-
+        /// <summary>
+        /// Takes in the uploaded image and, if able, sends it to the API to be converted
+        /// </summary>
+        /// <param name="formFile">form from the front end</param>
+        /// <returns></returns>
         public async Task ReadHandwrittenText(IFormFile formFile)
         {
             try
@@ -164,6 +166,11 @@ namespace Wordify.Pages
             }
         }
 
+        /// <summary>
+        /// takes in the JSON string and deserialises it based on the RootObject
+        /// </summary>
+        /// <param name="jsonString">the JSON string</param>
+        /// <returns>Deserialized root object</returns>
         public static RootObject JsonParse(string jsonString)
         {           
             //string json;
@@ -190,6 +197,12 @@ namespace Wordify.Pages
             return text;
         }
 
+        /// <summary>
+        /// takes in the List of Lines taken from the JSON and uses string builder to 
+        /// combine them into a single string 
+        /// </summary>
+        /// <param name="text">the list of Lines found on the JSOn</param>
+        /// <returns>the combined lines as a string</returns>
         public static string TextString( List<Line> text)
         {
             StringBuilder sb = new StringBuilder();
@@ -204,7 +217,12 @@ namespace Wordify.Pages
             return returnString;
         }
 
-
+        /// <summary>
+        /// takes in the image from the front end, and turns it into a byte array so it can 
+        /// be stored and used.
+        /// </summary>
+        /// <param name="formFile">from the front end input</param>
+        /// <returns>image as a byte array</returns>
         public static byte[] GetImageAsByteArray(IFormFile formFile)
         {
             //using (FileStream fileStream =
