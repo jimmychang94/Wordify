@@ -7,7 +7,7 @@ namespace Wordify.Models.Interfaces
 {
     public interface INote
     {
-        void CreateNote(Note newNote);
+        Task CreateNote(Note newNote);
         void DestroyNote(int ID);
         void UpdateNote(Note note, int ID);
         Task<List<Note>> GetNotesByUserID(string userID);
