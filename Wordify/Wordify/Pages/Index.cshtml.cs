@@ -11,6 +11,7 @@ using Wordify.Data;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
+using System.Drawing;
 
 namespace Wordify.Pages
 {
@@ -35,6 +36,8 @@ namespace Wordify.Pages
             _userManager = userManager;
             _signInManager = signInManager;
             Configuration = configuration;
+
+
         }
 
         public void OnGet()

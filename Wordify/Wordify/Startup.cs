@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wordify.Data;
+using Wordify.Models;
+using Wordify.Models.Interfaces;
 using Wordify.Services;
 
 namespace Wordify
@@ -57,6 +59,8 @@ namespace Wordify
                 options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
 
             services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddSingleton<IBlob, DevBlob>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
