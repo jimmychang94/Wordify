@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using Wordify.Data.json;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using System.Drawing;
 
 namespace Wordify.Pages
 {
@@ -24,13 +26,18 @@ namespace Wordify.Pages
         public static IConfiguration Configuration;
 
         [BindProperty]
-        public string imageFilePath { get; set; }
+        public string ImageFilePath { get; set; }
 
         [BindProperty]
-        public string responseContent { get; set; }
+        public string ResponseContent { get; set; }
 
+        [BindProperty]
+        public string FileName { get; set; }
 
-        public string responseString { get; set; }
+        [BindProperty]
+        public IFormFile FormFile { get; set; }
+
+        public string ResponseString { get; set; }
 
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
@@ -48,14 +55,23 @@ namespace Wordify.Pages
 
 
 
-        public async void OnPost(string imageFilePath)
+        public async void OnPost()
         {
             var user = await _userManager.GetUserAsync(User);
-
-            if(System.IO.File.Exists(imageFilePath))
+            if (FormFile.Length > 0)
             {
-                ReadHandwrittenText(imageFilePath).Wait();
+                ReadHandwrittenText(FormFile).Wait();
             }
+            //if(System.IO.File.Exists(ImageFilePath))
+            //{
+            //    FileName = Path.GetFileName(ImageFilePath);
+            //    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FileName);
+            //    ReadHandwrittenText(ImageFilePath).Wait();
+            //    using (var stream = new FileStream(path, FileMode.Create))
+            //    {
+            //        await FormFile.CopyToAsync(stream);
+            //    }
+            //}
             else
             {
                 // file does not exist
@@ -65,7 +81,7 @@ namespace Wordify.Pages
 
 
 
-        public async Task ReadHandwrittenText(string imageFilePath)
+        public async Task ReadHandwrittenText(IFormFile formFile)
         {
             try
             {
@@ -82,7 +98,7 @@ namespace Wordify.Pages
 
                 string operationLocation;
 
-                byte[] byteData = GetImageAsByteArray(imageFilePath);
+                byte[] byteData = GetImageAsByteArray(formFile);
 
                 using (ByteArrayContent content = new ByteArrayContent(byteData))
                 {
@@ -118,11 +134,15 @@ namespace Wordify.Pages
                     return;
                 }
 
-                responseContent = JToken.Parse(contentString).ToString();
+                ResponseContent = JToken.Parse(contentString).ToString();
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
-                responseString = TextString(Lines);
-
+                ResponseString = TextString(Lines);
+                using (var ms = new MemoryStream(byteData))
+                {
+                    Image image = Image.FromStream(ms);
+                    image.Save("wwwroot/test.PNG", System.Drawing.Imaging.ImageFormat.Png);
+                }
             }
             catch (Exception e)
             {
@@ -171,13 +191,20 @@ namespace Wordify.Pages
         }
 
 
-        public static byte[] GetImageAsByteArray(string imageFilePath)
+        public static byte[] GetImageAsByteArray(IFormFile formFile)
         {
-            using (FileStream fileStream =
-                new FileStream(imageFilePath, FileMode.Open, FileAccess.Read))
+            //using (FileStream fileStream =
+            //    new FileStream(imageFilePath, FileMode.Open, FileAccess.Read))
+            //{
+            //    BinaryReader binaryReader = new BinaryReader(fileStream);
+            //    return binaryReader.ReadBytes((int)fileStream.Length);
+            //}
+            byte[] fileBytes = new byte[formFile.Length];
+            using (var ms = new MemoryStream())
             {
-                BinaryReader binaryReader = new BinaryReader(fileStream);
-                return binaryReader.ReadBytes((int)fileStream.Length);
+                formFile.CopyTo(ms);
+                fileBytes = ms.ToArray();
+                return fileBytes;
             }
         }
     }
