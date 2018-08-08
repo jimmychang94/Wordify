@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Wordify.Migrations
+namespace Wordify.Migrations.DataDb
 {
-    public partial class dataDb : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,7 @@ namespace Wordify.Migrations
                     BlobName = table.Column<string>(nullable: true),
                     BlobLength = table.Column<int>(nullable: false),
                     UserID = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

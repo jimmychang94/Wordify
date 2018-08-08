@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wordify.Data;
 
-namespace Wordify.Migrations
+namespace Wordify.Migrations.DataDb
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20180808204032_dataDb")]
-    partial class dataDb
+    partial class DataDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +30,8 @@ namespace Wordify.Migrations
                     b.Property<string>("BlobName");
 
                     b.Property<DateTime>("Date");
+
+                    b.Property<string>("Title");
 
                     b.Property<string>("UserID");
 

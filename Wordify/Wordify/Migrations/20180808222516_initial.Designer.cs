@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wordify.Data;
 
-namespace Wordify.Data.Migrations
+namespace Wordify.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180806205438_initial")]
+    [Migration("20180808222516_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -47,9 +47,9 @@
 
 </form>
 
-<ul>
-    @for (int i = 1; i <= Model.Notes.Count; i++)
+<ol>
+    @foreach(var item in Model.Notes)
     {
-        <li>@i: <a>@Model.Notes[i].Title</a></li>
+        <li>@item.Title</li>
     }
-</ul>
+</ol>

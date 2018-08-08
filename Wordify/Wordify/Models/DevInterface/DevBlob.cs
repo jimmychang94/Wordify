@@ -17,7 +17,7 @@ namespace Wordify.Models
         private CloudBlobContainer _Documents { get; }
         private CloudBlobContainer _Images { get; }
 
-        
+
         public DevBlob(IConfiguration Configuration)
         {
             _CloudStorageAccount = CloudStorageAccount.Parse(Configuration["BlobStorage:ConnectionString"]);
@@ -27,6 +27,7 @@ namespace Wordify.Models
             _Images = _CloudBlobClient.GetContainerReference(Configuration["BlobStorage:ImageContainer"]);
             SetPermissions();
         }
+
 
         /**
          * Sets Permissions for individual Blob Storage Containers - Required to modify contents.
@@ -42,24 +43,27 @@ namespace Wordify.Models
             await _Images.SetPermissionsAsync(permissions);
         }
 
+
         /**
          * Upload Note contents to Blob Storage
          */
-        public async Task<Note> Upload(Note newNote, string text, byte[] byteData)
+        public async Task Upload(Note newNote, string text, byte[] byteData)
         {
             string blobName = Guid.NewGuid().ToString();
 
-            CloudBlockBlob blobText = _Documents.GetBlockBlobReference(blobName);
-            CloudBlockBlob blobImage = _Images.GetBlockBlobReference(blobName);
+            var blobText = _Documents.GetBlockBlobReference(blobName);
+            var blobImage = _Images.GetBlockBlobReference(blobName);
 
             await blobText.UploadTextAsync(text);
             await blobImage.UploadFromByteArrayAsync(byteData, 0, byteData.Length);
 
             newNote.BlobName = blobName;
-            return newNote;
         }
 
 
+        /**
+         * Retrieve text from Documents Blob
+         */
         public async Task<string> GetText(Note note)
         {
             try
@@ -68,11 +72,14 @@ namespace Wordify.Models
             }
             catch (Exception)
             {
-                return "Blob does not exist.";
+                throw new Exception("Blob does not exist");
             }
         }
 
 
+        /**
+         * Retrieve image from Images Blob
+         */
         public async Task<byte[]> GetImage(Note note)
         {
             try
@@ -90,14 +97,60 @@ namespace Wordify.Models
         }
 
 
-        public async void DeleteBlob(string blobName)
+        /**
+         * Update Blob text
+         */
+        public async void UpdateText(Note note, string newText)
         {
-            CloudBlob imageBlob = _Images.GetBlobReference(blobName);
-            CloudBlob textBlob = _Documents.GetBlobReference(blobName);
+            try
+            {
+                var textBlob = _Documents.GetBlockBlobReference(note.BlobName);
 
-            await imageBlob.DeleteIfExistsAsync();
-            await textBlob.DeleteIfExistsAsync();
+                await textBlob.UploadTextAsync(newText);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Blob does not exist.");
+            }
+
         }
 
+
+        /**
+         * Update Blob image
+         */
+        public async void UpdateImage(Note note, byte[] newImage)
+        {
+            try
+            {
+                var imageBlob = _Documents.GetBlockBlobReference(note.BlobName);
+
+                await imageBlob.UploadFromByteArrayAsync(newImage, 0, newImage.Length);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Blob does not exist.");
+            }
+        }
+
+
+        /**
+         * Remove note image and text from blob
+         */
+        public async void DeleteBlob(Note note)
+        {
+            try
+            {
+                var imageBlob = _Images.GetBlockBlobReference(note.BlobName);
+                var textBlob = _Documents.GetBlockBlobReference(note.BlobName);
+
+                await imageBlob.DeleteIfExistsAsync();
+                await textBlob.DeleteIfExistsAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Blob does not exist.");
+            }
+        }
     }
 }

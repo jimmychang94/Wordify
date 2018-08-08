@@ -21,7 +21,7 @@ namespace Wordify.Models
             Configuration = configuration;
         }
 
-        public async void CreateNote(Note newNote)
+        public async Task CreateNote(Note newNote)
         {
             await _context.Notes.AddAsync(newNote);
             await _context.SaveChangesAsync();
