@@ -15,8 +15,12 @@ using Wordify.Data.json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Drawing;
+<<<<<<< HEAD
+using Wordify.Extensions;
+=======
 using Wordify.Models.Interfaces;
 using Wordify.Models;
+>>>>>>> Staging
 
 namespace Wordify.Pages
 {
@@ -141,6 +145,13 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
+<<<<<<< HEAD
+                if(_signInManager.IsSignedIn(User))
+                {
+                    TempData["Test"] = $"Hi {User.Identity.Name}!";
+                }
+                ImageDisplayExtensions.DisplayImage(byteData);
+=======
                 using (var ms = new MemoryStream(byteData))
                 {
                     Image image = Image.FromStream(ms);
@@ -157,6 +168,7 @@ namespace Wordify.Pages
                     };
                     _blob.Upload(note, ResponseString, byteData);
                 }
+>>>>>>> Staging
             }
             catch (Exception e)
             {
@@ -165,14 +177,7 @@ namespace Wordify.Pages
         }
 
         public static RootObject JsonParse(string jsonString)
-        {           
-            //string json;
-            //using (StreamReader r = new StreamReader(jsonString))
-            //{
-            //    json = r.ReadToEnd();
-            //};
-            //Converts the JSON files data and puts it into a RootObject, which chains to the other classes  
-            // and allocates the data to the proper sections
+        {
             RootObject ImageText = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(jsonString);
             return ImageText;
         }
