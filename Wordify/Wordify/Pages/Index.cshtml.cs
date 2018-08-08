@@ -45,6 +45,7 @@ namespace Wordify.Pages
         public IFormFile FormFile { get; set; }
 
         public string ResponseString { get; set; }
+        public byte[] ByteData { get; set; }
 
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
@@ -57,37 +58,31 @@ namespace Wordify.Pages
             _note = note;
         }
 
+        /// <summary>
+        /// OnGet - Runs on page Load
+        /// </summary>
         public void OnGet()
         {
         }
         
-
-
-        //take in the FormFile from the frontend and start off the process of sending it to the API
+        /// <summary>
+        /// OnPost - Runs when Submit button is pressed
+        /// </summary>
         public void OnPost()
         {
-            if (FormFile.Length > 0)
+            if (FormFile != null)
             {
                 ReadHandwrittenText(FormFile).Wait();
             }
-            //if(System.IO.File.Exists(ImageFilePath))
-            //{
-            //    FileName = Path.GetFileName(ImageFilePath);
-            //    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FileName);
-            //    ReadHandwrittenText(ImageFilePath).Wait();
-            //    using (var stream = new FileStream(path, FileMode.Create))
-            //    {
-            //        await FormFile.CopyToAsync(stream);
-            //    }
-            //}
             else
             {
-                // file does not exist
+                TempData["Error"] = "No File Uploaded.";
             }
         }
 
+
         /// <summary>
-        /// Takes in the uploaded image and, if able, sends it to the API to be converted
+        /// ReadHandWrittenText - Takes in the uploaded image and, if able, sends it to the API to be converted.
         /// </summary>
         /// <param name="formFile">form from the front end</param>
         /// <returns></returns>
@@ -100,17 +95,15 @@ namespace Wordify.Pages
                 client.DefaultRequestHeaders.Add(
                     "Ocp-Apim-Subscription-Key", Configuration["CognitiveServices:subscriptionKey"]);
 
-                string requestParameters = "mode=Handwritten";
-
-                string uri = $"{Configuration["CognitiveServices:uriBase"]}?{requestParameters}";
+                string uri = $"{Configuration["CognitiveServices:uriBase"]}?mode=Handwritten";
 
                 HttpResponseMessage response;
 
                 string operationLocation;
 
-                byte[] byteData = GetImageAsByteArray(formFile);
+                GetImageAsByteArray(formFile);
 
-                using (ByteArrayContent content = new ByteArrayContent(byteData))
+                using (ByteArrayContent content = new ByteArrayContent(ByteData))
                 {
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
@@ -149,30 +142,43 @@ namespace Wordify.Pages
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
 
-                ImageDisplayExtensions.DisplayImage(byteData);
+                ImageDisplayExtensions.DisplayImage(ByteData);
 
                 if(_signInManager.IsSignedIn(User))
                 {
-                    var user = await _userManager.GetUserAsync(User);
-                    Note note = new Note()
-                    {
-                        UserID = user.Id,
-                        Date = DateTime.Now,
-                        Title = Title,
-                        BlobLength = byteData.Length
-                    };
-                    await _blob.Upload(note, ResponseString, byteData);
-                    await _note.CreateNote(note);
+                    await SaveNoteAsync();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                TempData["Error"] = "Something went wrong.";
             }
         }
 
+
         /// <summary>
-        /// takes in the JSON string and deserialises it based on the RootObject
+        /// SaveNoteAsync - Saves the current note into Note Database and Uploads Image and Response text to Blob storage.
+        /// </summary>
+        /// <returns></returns>
+        public async Task SaveNoteAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            Note note = new Note()
+            {
+                UserID = user.Id,
+                Date = DateTime.Now,
+                Title = Title,
+                BlobLength = ByteData.Length,
+            };
+
+            await _blob.Upload(note, ResponseString, ByteData);
+            await _note.CreateNote(note);
+        }
+
+
+        /// <summary>
+        /// JsonParse - Takes in the JSON string and deserialises it based on the RootObject.
         /// </summary>
         /// <param name="jsonString">the JSON string</param>
         /// <returns>Deserialized root object</returns>
@@ -182,7 +188,12 @@ namespace Wordify.Pages
             return ImageText;
         }
 
-        //filter RootObject down to a list of lines.text
+
+        /// <summary>
+        /// FilerteredJson - Filters JSON object into lines of text.
+        /// </summary>
+        /// <param name="ImagePath"></param>
+        /// <returns></returns>
         public static List<Line> FilteredJson(RootObject ImagePath)
         {
             Convertedjson displayJson = new Convertedjson();
@@ -195,12 +206,13 @@ namespace Wordify.Pages
             return text;
         }
 
+
         /// <summary>
-        /// takes in the List of Lines taken from the JSON and uses string builder to 
-        /// combine them into a single string 
+        /// TextString - Takes in the List of Lines taken from the JSON and uses string builder to 
+        ///     combine them into a single string.
         /// </summary>
-        /// <param name="text">the list of Lines found on the JSOn</param>
-        /// <returns>the combined lines as a string</returns>
+        /// <param name="text"> The list of Lines found on the JSON.</param>
+        /// <returns> The combined lines as a string.</returns>
         public static string TextString( List<Line> text)
         {
             StringBuilder sb = new StringBuilder();
@@ -210,31 +222,22 @@ namespace Wordify.Pages
                 sb.AppendLine(item.text);
             }
 
-            string returnString = sb.ToString();
-
-            return returnString;
+            return sb.ToString();
         }
 
+
         /// <summary>
-        /// takes in the image from the front end, and turns it into a byte array so it can 
-        /// be stored and used.
+        /// GetImageAsByteArray - Takes in the image from the front end, and turns it into a byte array so it can 
+        ///     be stored and used.
         /// </summary>
         /// <param name="formFile">from the front end input</param>
-        /// <returns>image as a byte array</returns>
-        public static byte[] GetImageAsByteArray(IFormFile formFile)
+        public void GetImageAsByteArray(IFormFile formFile)
         {
-            //using (FileStream fileStream =
-            //    new FileStream(imageFilePath, FileMode.Open, FileAccess.Read))
-            //{
-            //    BinaryReader binaryReader = new BinaryReader(fileStream);
-            //    return binaryReader.ReadBytes((int)fileStream.Length);
-            //}
-            byte[] fileBytes = new byte[formFile.Length];
+            ByteData = new byte[formFile.Length];
             using (var ms = new MemoryStream())
             {
                 formFile.CopyTo(ms);
-                fileBytes = ms.ToArray();
-                return fileBytes;
+                ByteData = ms.ToArray();
             }
         }
     }
