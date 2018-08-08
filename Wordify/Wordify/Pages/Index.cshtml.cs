@@ -162,7 +162,7 @@ namespace Wordify.Pages
                         BlobLength = byteData.Length
                     };
                     await _blob.Upload(note, ResponseString, byteData);
-                    _note.CreateNote(note);
+                    await _note.CreateNote(note);
                 }
             }
             catch (Exception e)
