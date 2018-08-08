@@ -15,12 +15,9 @@ using Wordify.Data.json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Drawing;
-<<<<<<< HEAD
 using Wordify.Extensions;
-=======
 using Wordify.Models.Interfaces;
 using Wordify.Models;
->>>>>>> Staging
 
 namespace Wordify.Pages
 {
@@ -29,7 +26,7 @@ namespace Wordify.Pages
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private  IBlob _blob;
-
+        private INote _note;
         public static IConfiguration Configuration;
 
         [BindProperty]
@@ -42,18 +39,22 @@ namespace Wordify.Pages
         public string FileName { get; set; }
 
         [BindProperty]
+        public string Title { get; set; }
+
+        [BindProperty]
         public IFormFile FormFile { get; set; }
 
         public string ResponseString { get; set; }
 
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IConfiguration configuration, IBlob blob)
+            IConfiguration configuration, IBlob blob, INote note)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             Configuration = configuration;
             _blob = blob;
+            _note = note;
         }
 
         public void OnGet()
@@ -147,18 +148,8 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
-<<<<<<< HEAD
-                if(_signInManager.IsSignedIn(User))
-                {
-                    TempData["Test"] = $"Hi {User.Identity.Name}!";
-                }
+
                 ImageDisplayExtensions.DisplayImage(byteData);
-=======
-                using (var ms = new MemoryStream(byteData))
-                {
-                    Image image = Image.FromStream(ms);
-                    image.Save("wwwroot/test.PNG", System.Drawing.Imaging.ImageFormat.Png);
-                }
 
                 if(_signInManager.IsSignedIn(User))
                 {
@@ -166,11 +157,13 @@ namespace Wordify.Pages
                     Note note = new Note()
                     {
                         UserID = user.Id,
-                        Date = DateTime.Now
+                        Date = DateTime.Now,
+                        Title = Title,
+                        BlobLength = byteData.Length
                     };
-                    _blob.Upload(note, ResponseString, byteData);
+                    await _blob.Upload(note, ResponseString, byteData);
+                    _note.CreateNote(note);
                 }
->>>>>>> Staging
             }
             catch (Exception e)
             {

@@ -13,7 +13,7 @@ namespace Wordify.Models.Interfaces
         void SetPermissions();
 
         // upload note(Note newNote, image file, text file) => return void
-        void Upload(Note newNote, string text, byte[] byteData);
+        Task<Note> Upload(Note newNote, string text, byte[] byteData);
 
         // get image by blobName(blobName) => return image file
         Task<byte[]> GetImage(Note note);

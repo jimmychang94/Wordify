@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Wordify.Data;
+using Wordify.Models;
+using Wordify.Models.Interfaces;
 
 namespace Wordify.Pages
 {
@@ -20,6 +22,7 @@ namespace Wordify.Pages
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
+        private INote _notes;
 
         [BindProperty]
         public string FirstName { get; set; }
@@ -36,12 +39,15 @@ namespace Wordify.Pages
         [BindProperty]
         public string Bio { get; set; }
 
+        [BindProperty]
+        public List<Note> Notes { get; set; }
 
-        public ProfileModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public ProfileModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            INote notes)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-
+            _notes = notes;
         }
 
         public async Task<IActionResult> OnGet()
@@ -53,6 +59,7 @@ namespace Wordify.Pages
             LastName = user.LastName;
             Bio = user.Bio;
             Email = user.Email;
+            Notes = await _notes.GetNotesByUserID(user.Id);
             return Page();
         }
 
