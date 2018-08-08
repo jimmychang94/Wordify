@@ -58,6 +58,9 @@ namespace Wordify
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
 
+            services.AddDbContext<DataDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyDataDb")));
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole(ApplicationRoles.Admin));
@@ -67,6 +70,7 @@ namespace Wordify
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSingleton<IBlob, DevBlob>();
+            services.AddScoped<INote, DevNote>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

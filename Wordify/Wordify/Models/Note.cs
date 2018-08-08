@@ -11,6 +11,7 @@ namespace Wordify.Models
         public string BlobName { get; set; } // link to location in blob storage
         public int BlobLength { get; set; }
         public string UserID { get; set; }
+        public string Title { get; set; }
         public DateTime Date { get; set; } 
     }
 }

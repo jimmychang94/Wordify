@@ -46,3 +46,10 @@
     </div>
 
 </form>
+
+<ul>
+    @for (int i = 1; i <= Model.Notes.Count; i++)
+    {
+        <li>@i: <a>@Model.Notes[i].Title</a></li>
+    }
+</ul>

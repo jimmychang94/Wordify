@@ -6,7 +6,7 @@
     ViewData["Title"] = "Home page";
 }
 
-@if(SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User))
 {
     <br />
     <h4>Hello @User.Claims.First(c => c.Type == "FullName").Value</h4>
@@ -19,6 +19,7 @@
     <p>4MB's or smaller</p>
     <p>40x40 min, 3200x3200 max</p>
     <input type="file" asp-for="FormFile" />
+    <input type="text" placeholder="Title of Note" asp-for="Title" />
     <br />
 
     <button type="submit"> Upload </button>
@@ -26,8 +27,10 @@
 
 <p>@TempData["Error"]</p>
 
+@*<img src="~/test.PNG" />*@
+
 @if (Model.ResponseContent != null)
 {
-  <img src="~/test.PNG" />
-  <textarea rows="10" cols="50">@Model.ResponseString</textarea>
+    <img src="~/test.PNG" />
+    <textarea rows="10" cols="50">@Model.ResponseString</textarea>
 }
