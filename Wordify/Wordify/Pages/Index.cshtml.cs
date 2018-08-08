@@ -15,12 +15,9 @@ using Wordify.Data.json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Drawing;
-<<<<<<< HEAD
 using Wordify.Extensions;
-=======
 using Wordify.Models.Interfaces;
 using Wordify.Models;
->>>>>>> Staging
 
 namespace Wordify.Pages
 {
@@ -65,23 +62,13 @@ namespace Wordify.Pages
         //take in the FormFile from the frontend and start off the process of sending it to the API
         public void OnPost()
         {
-            if (FormFile.Length > 0)
+            if (FormFile != null)
             {
                 ReadHandwrittenText(FormFile).Wait();
             }
-            //if(System.IO.File.Exists(ImageFilePath))
-            //{
-            //    FileName = Path.GetFileName(ImageFilePath);
-            //    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FileName);
-            //    ReadHandwrittenText(ImageFilePath).Wait();
-            //    using (var stream = new FileStream(path, FileMode.Create))
-            //    {
-            //        await FormFile.CopyToAsync(stream);
-            //    }
-            //}
             else
             {
-                // file does not exist
+                TempData["Error"] = "Error: No File Input";
             }
         }
 
@@ -147,18 +134,8 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
-<<<<<<< HEAD
-                if(_signInManager.IsSignedIn(User))
-                {
-                    TempData["Test"] = $"Hi {User.Identity.Name}!";
-                }
+
                 ImageDisplayExtensions.DisplayImage(byteData);
-=======
-                using (var ms = new MemoryStream(byteData))
-                {
-                    Image image = Image.FromStream(ms);
-                    image.Save("wwwroot/test.PNG", System.Drawing.Imaging.ImageFormat.Png);
-                }
 
                 if(_signInManager.IsSignedIn(User))
                 {
@@ -170,7 +147,7 @@ namespace Wordify.Pages
                     };
                     _blob.Upload(note, ResponseString, byteData);
                 }
->>>>>>> Staging
+
             }
             catch (Exception e)
             {
