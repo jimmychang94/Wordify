@@ -8,23 +8,26 @@ using System.Threading.Tasks;
 namespace Wordify.Models.Interfaces
 {
     public interface IBlob
-    {   
-        // Set Blob Permissions
+    {
+        // Sets Permissions for individual Blob Storage Containers - Required to modify contents.
         void SetPermissions();
 
-        // upload note(Note newNote, image file, text file) => return void
+        // Upload Note contents to Blob Storage
         void Upload(Note newNote, string text, byte[] byteData);
 
-        // get image by blobName(blobName) => return image file
+        // Retrieve image from Images Blob
         Task<byte[]> GetImage(Note note);
 
-        // get text by blobname(blobName) => return text file
+        // Retrieve text from Documents Blob
         Task<string> GetText(Note note);
 
-        // update text(blobName, text file) => return void
+        // Update Blob text
+        void UpdateText(Note note, string newText);
 
-        // update image(blobName, image file)=> return void
+        // Update Blob image
+        void UpdateImage(Note note, byte[] newImage);
 
-        // delete blob(blobName)=> return void
+        // Remove note image and text from blob storage
+        void DeleteBlob(Note note);
     }
 }
