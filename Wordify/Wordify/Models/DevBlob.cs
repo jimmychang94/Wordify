@@ -28,7 +28,9 @@ namespace Wordify.Models
             SetPermissions();
         }
 
-
+        /**
+         * Sets Permissions for individual Blob Storage Containers - Required to modify contents.
+         */
         public async void SetPermissions()
         {
             BlobContainerPermissions permissions = new BlobContainerPermissions
@@ -40,7 +42,9 @@ namespace Wordify.Models
             await _Images.SetPermissionsAsync(permissions);
         }
 
-
+        /**
+         * Upload Note contents to Blob Storage
+         */
         public async void Upload(Note newNote, string text, byte[] byteData)
         {
             string blobName = Guid.NewGuid().ToString();
@@ -55,20 +59,34 @@ namespace Wordify.Models
         }
 
 
-        public async Task<ICloudBlob> GetText(string blobName)
+        public async Task<string> GetText(Note note)
         {
-            ICloudBlob textResult = await _Documents.GetBlobReferenceFromServerAsync(blobName);
-            return textResult;
+            try
+            {
+                return await _Documents.GetBlockBlobReference(note.BlobName).DownloadTextAsync();
+            }
+            catch (Exception)
+            {
+                return "Blob does not exist.";
+            }
         }
 
 
-        public async Task<ICloudBlob> GetImage(string blobName)
+        public async Task<byte[]> GetImage(Note note)
         {
-            ICloudBlob imageResult = await _Images.GetBlobReferenceFromServerAsync(blobName);
-            return imageResult;
+            try
+            {
+                byte[] byteData = new byte[note.BlobLength];
+
+                int num = await _Images.GetBlockBlobReference(note.BlobName).DownloadToByteArrayAsync(byteData, 0);
+
+                return byteData;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Blob does not exist.");
+            }
         }
-
-
 
 
         public async void DeleteBlob(string blobName)
