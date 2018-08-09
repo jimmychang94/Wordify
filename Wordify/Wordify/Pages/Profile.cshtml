@@ -6,7 +6,9 @@
 
 <h1>Your Profile</h1>
 
-<form method="post">
+<p>@TempData["Error"]</p>
+
+<form method="post" asp-page-handler="User">
 
     <div class="form-group row">
         <h5 class="col-sm-2 offset-sm-1"><label asp-for="UserName" class="col-form-label"></label></h5>
@@ -47,9 +49,27 @@
 
 </form>
 
-<ol>
-    @foreach(var item in Model.Notes)
-    {
-        <li>@item.Title</li>
-    }
-</ol>
+
+<form method="post" asp-page-handler="Note">
+
+    <ol>
+        @foreach (var item in Model.Notes)
+        {
+            @*<li><a asp-page="/Notes" asp-route-id="@item.ID">@item.Title</a></li>*@
+            <li><button type="submit" asp-page-handler="Note" asp-route-id="@item.ID">@item.Title</button></li>
+        }
+    </ol>
+</form>
+
+
+@if(Model.Note != null)
+{
+    <h3>Your Note</h3>
+
+    <form>
+        <img src="~/test.PNG" />
+        <input type="text" value="@Model.Note.Title" asp-for="@Model.Note.Title" />
+        <textarea rows="10" cols="50">@Model.Text</textarea>
+        <button type="submit">Submit</button>
+    </form>
+}
