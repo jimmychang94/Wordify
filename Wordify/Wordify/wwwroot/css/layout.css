@@ -1,0 +1,61 @@
+﻿/**
+    Header
+*/
+header {
+    position: relative;
+}
+    header .logo {
+        position: absolute;
+        left: 5vw;
+        top: 2vw;
+        font-size:  4vw;
+        line-height: 2vw;
+    }
+
+    header ul {
+        position: absolute;
+        right: 5vw;
+        top: 2vw;
+    }
+
+    header li{
+        display: inline-block;
+        float: right;
+        padding: .5vw;
+    }
+
+        header li a {
+            font-family: 'Oswald', sans-serif;
+            color: white;
+        }
+
+
+/**
+    Footer
+*/
+footer {
+    position: relative;
+}
+    footer .logo{
+        position: absolute;
+        font-size: 2vw;
+        left: 5vw;
+        top: 5vw;
+    }
+
+    footer .icon-Microsoft {
+        position: absolute;
+        left: 13vw;
+        top: 4.5vw;
+        font-size: 3vw;
+    }
+
+    footer #smallprint {
+        position: absolute;
+        bottom: .2vw;
+        left: 40vw;
+        color: #444;
+        width: 20vw;
+        text-align: center;
+    }
+

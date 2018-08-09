@@ -6,26 +6,20 @@
     ViewData["Title"] = "Home page";
 }
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <br />
-    <h4>Hello @User.Claims.First(c => c.Type == "FullName").Value</h4>
-}
-
 <h1>Upload an Image</h1>
 <form method="post" enctype="multipart/form-data">
     <p>@TempData["ErrorString"]</p>
-    <p>Select a jpg, png, or bmp image type</p>
-    <p>4MB's or smaller</p>
-    <p>40x40 min, 3200x3200 max</p>
-    <input type="file" asp-for="FormFile" />
     <input type="text" placeholder="Title of Note" asp-for="Title" />
-    <br />
-
+    </br>
+    <input type="file" asp-for="FormFile" />
     <button type="submit"> Upload </button>
 </form>
+<p>Select a jpg, png, or bmp image type</p>
+<p>4MB's or smaller</p>
+<p>40x40 min, 3200x3200 max</p>
 
 <p>@TempData["Error"]</p>
+
 
 @if (Model.ResponseContent != null)
 {

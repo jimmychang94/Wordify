@@ -21,8 +21,7 @@ namespace Wordify.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
