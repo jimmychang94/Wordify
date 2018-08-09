@@ -25,7 +25,7 @@ namespace Wordify.Pages
         public List<ApplicationUser> Users { get; set; }
 
         [BindProperty]
-        public List<Note> Notes { get; set; }
+        public List<AdminViewModel> AVMs { get; set; }
 
         [BindProperty]
         public Note Note { get; set; }
@@ -40,12 +40,22 @@ namespace Wordify.Pages
             _signInManager = signInManager;
             _note = note;
             _blob = blob;
+            AVMs = new List<AdminViewModel>();
         }
 
         public void OnGet()
         {
             Users = _userManager.Users.ToList();
-            Notes = _note.GetAllNotes().Result;
+            List<Note> Notes = _note.GetAllNotes().Result;
+            foreach(Note note in Notes)
+            {
+                var user = _userManager.FindByIdAsync(note.UserID).Result;
+                AVMs.Add(new AdminViewModel()
+                {
+                    Note = note,
+                    UserName = user.UserName
+                });
+            }
         }
 
         public IActionResult OnPostDelete(string id)
@@ -74,7 +84,16 @@ namespace Wordify.Pages
                 byte[] blobImage = _blob.GetImage(note).Result;
                 ImageDisplayExtensions.DisplayImage(blobImage);
                 Users = _userManager.Users.ToList();
-                Notes = _note.GetAllNotes().Result;
+                List<Note> Notes = _note.GetAllNotes().Result;
+                foreach (Note tempNote in Notes)
+                {
+                    var user = _userManager.FindByIdAsync(tempNote.UserID).Result;
+                    AVMs.Add(new AdminViewModel()
+                    {
+                        Note = tempNote,
+                        UserName = user.UserName
+                    });
+                }
             }
             catch (Exception)
             {

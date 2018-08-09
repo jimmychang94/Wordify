@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Wordify.Models
 {
-    public class DisplayViewModel
+    public class AdminViewModel
     {
-        public string Text { get; set; }
+        public string UserName { get; set; }
         public Note Note { get; set; }
     }
 }

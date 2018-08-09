@@ -40,11 +40,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Note note in Model.Notes)
+            @foreach (AdminViewModel avm in Model.AVMs)
             {
                 <tr>
-                    <td>@note.Title</td>
-                    <td><button type="submit" asp-page-handler="Note" asp-route-id="@note.ID">See Note</button></td>
+                    <td>@avm.Note.Title</td>
+                    <td>@avm.UserName</td>
+                    <td><button type="submit" asp-page-handler="Note" asp-route-id="@avm.Note.ID">See Note</button></td>
                 </tr>
             }
         </tbody>
