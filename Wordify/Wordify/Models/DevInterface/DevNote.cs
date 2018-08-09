@@ -61,6 +61,7 @@ namespace Wordify.Models
             return userNotes;
         }
 
+
         public async void UpdateNote(Note note, int ID)
         {
             Note oldNote = await _context.Notes.FirstOrDefaultAsync(n => n.ID == ID);
@@ -70,6 +71,8 @@ namespace Wordify.Models
                 oldNote.Title = note.Title;
                 _context.Notes.Update(oldNote);
                 await _context.SaveChangesAsync();
+                System.Threading.Thread.Sleep(500); //purely for testing. probably will refactor
+
             }
         }
     }

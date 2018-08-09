@@ -96,13 +96,9 @@ namespace Wordify.Pages
                     "Ocp-Apim-Subscription-Key", Configuration["CognitiveServices:subscriptionKey"]);
 
                 string uri = $"{Configuration["CognitiveServices:uriBase"]}?mode=Handwritten";
-
                 HttpResponseMessage response;
-
                 string operationLocation;
-
                 GetImageAsByteArray(formFile);
-
                 using (ByteArrayContent content = new ByteArrayContent(ByteData))
                 {
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
