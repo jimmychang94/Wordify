@@ -47,6 +47,7 @@ namespace Wordify.Pages
         [BindProperty]
         public Note Note { get; set; }
 
+        [BindProperty]
         public string Text { get; set; }
 
         public ProfileModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
@@ -117,6 +118,41 @@ namespace Wordify.Pages
             {
                 TempData["Error"] = "Something went wrong with the Post Note";
             }
+        }
+
+        public IActionResult OnPostDeleteNote(int id)
+        {
+            Note note = _notes.GetNoteByID(id).Result;
+            _blob.DeleteBlob(note);
+            _notes.DestroyNote(id);
+            return RedirectToPage("/Profile");
+        }
+
+
+        public IActionResult OnPostUpdate(int id)
+        {
+            var user = _userManager.GetUserAsync(User).Result;
+
+            UserName = user.UserName;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Bio = user.Bio;
+            Email = user.Email;
+            Notes = _notes.GetNotesByUserID(user.Id).Result;
+            try
+            {
+                Note note = _notes.GetNoteByID(id).Result;
+                note.Title = Note.Title;
+                _notes.UpdateNote(note, id);
+                _blob.UpdateText(note, Text);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return RedirectToPage();
         }
     }
 }

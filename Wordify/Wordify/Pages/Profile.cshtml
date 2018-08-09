@@ -55,7 +55,6 @@
     <ol>
         @foreach (var item in Model.Notes)
         {
-            @*<li><a asp-page="/Notes" asp-route-id="@item.ID">@item.Title</a></li>*@
             <li><button type="submit" asp-page-handler="Note" asp-route-id="@item.ID">@item.Title</button></li>
         }
     </ol>
@@ -66,10 +65,11 @@
 {
     <h3>Your Note</h3>
 
-    <form>
+    <form method="post">
         <img src="~/test.PNG" />
         <input type="text" value="@Model.Note.Title" asp-for="@Model.Note.Title" />
-        <textarea rows="10" cols="50">@Model.Text</textarea>
-        <button type="submit">Submit</button>
+        <textarea rows="10" cols="50" asp-for="@Model.Text">@Model.Text</textarea>
+        <button type="submit" asp-page-handler="Update" asp-route-id="@Model.Note.ID">Update</button>
+        <button type="submit" asp-page-handler="DeleteNote" asp-route-id="@Model.Note.ID">Delete</button>
     </form>
 }
