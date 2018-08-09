@@ -117,6 +117,7 @@ namespace Wordify.Pages
                 else
                 {
                     string errorString = await response.Content.ReadAsStringAsync();
+                    TempData["ErrorString"] = "Could not process image. Please try with a new image. Make sure that the image follows the requirements listed below.";
                     return;
                 }
 
@@ -141,7 +142,6 @@ namespace Wordify.Pages
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
                 ResponseString = TextString(Lines);
-
                 ImageDisplayExtensions.DisplayImage(ByteData);
 
             }

@@ -58,10 +58,10 @@ namespace Wordify.Pages
             }
         }
 
-        public IActionResult OnPostDelete(string id)
+        public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
-            var user = _userManager.FindByIdAsync(id).Result;
-            _userManager.DeleteAsync(user);
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.DeleteAsync(user);
             return RedirectToPage("/Admin");
         }
 
