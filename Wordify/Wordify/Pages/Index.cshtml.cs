@@ -144,10 +144,6 @@ namespace Wordify.Pages
 
                 ImageDisplayExtensions.DisplayImage(ByteData);
 
-                if(_signInManager.IsSignedIn(User))
-                {
-                    await SaveNoteAsync();
-                }
             }
             catch (Exception)
             {
@@ -160,7 +156,7 @@ namespace Wordify.Pages
         /// SaveNoteAsync - Saves the current note into Note Database and Uploads Image and Response text to Blob storage.
         /// </summary>
         /// <returns></returns>
-        public async Task SaveNoteAsync()
+        public async Task OnPostSaveNoteAsync([FromForm]byte[] byteData, [FromForm]string responseString, [FromForm]string title)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -168,11 +164,11 @@ namespace Wordify.Pages
             {
                 UserID = user.Id,
                 Date = DateTime.Now,
-                Title = Title,
-                BlobLength = ByteData.Length,
+                Title = title,
+                BlobLength = byteData.Length,
             };
 
-            await _blob.Upload(note, ResponseString, ByteData);
+            await _blob.Upload(note, responseString, byteData);
             await _note.CreateNote(note);
         }
 

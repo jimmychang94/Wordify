@@ -27,13 +27,13 @@ namespace Wordify.Models
             await _context.SaveChangesAsync();
         }
 
-        public async void DestroyNote(int ID)
+        public void DestroyNote(int ID)
         {
-            Note note = await _context.Notes.FirstOrDefaultAsync(n => n.ID == ID);
+            Note note =  _context.Notes.FirstOrDefault(n => n.ID == ID);
             if(note != null)
             {
                 _context.Notes.Remove(note);
-               await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 
@@ -61,15 +61,15 @@ namespace Wordify.Models
             return userNotes;
         }
 
-        public async void UpdateNote(Note note, int ID)
+        public void UpdateNote(Note note, int ID)
         {
-            Note oldNote = await _context.Notes.FirstOrDefaultAsync(n => n.ID == ID);
+            Note oldNote = _context.Notes.FirstOrDefault(n => n.ID == ID);
 
             if(oldNote != null)
             {
                 oldNote.Title = note.Title;
                 _context.Notes.Update(oldNote);
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
             }
         }
     }

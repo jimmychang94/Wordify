@@ -29,6 +29,14 @@
 
 @if (Model.ResponseContent != null)
 {
-    <img src="~/test.PNG" />
-    <textarea rows="10" cols="50">@Model.ResponseString</textarea>
+    <form method="post" asp-page-handler="SaveNote">
+        <img src="~/test.PNG" />
+        <input type="hidden" asp-for="@Model.ByteData"/>
+        <input asp-for="@Model.Title" value="@Model.Title"/>
+        <textarea rows="10" cols="50" asp-for="@Model.ResponseString">@Model.ResponseString</textarea>
+        @if(SignInManager.IsSignedIn(User))
+        {
+            <button type="submit" >Save</button>
+        }
+    </form>
 }
