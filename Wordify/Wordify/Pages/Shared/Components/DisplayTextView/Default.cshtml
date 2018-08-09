@@ -1,0 +1,10 @@
+﻿@model Wordify.Models.DisplayViewModel
+
+
+<h3>Your Note</h3>
+
+<form>
+    <img src="~/test.PNG" />
+    <input type="text" value="@Model.Note.Title" asp-for="@Model.Note.Title" />
+    <textarea rows="10" cols="50">@Model.Text</textarea>
+</form>

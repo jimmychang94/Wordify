@@ -1,0 +1,15 @@
+﻿@page
+@model NotesModel
+@{
+    ViewData["Title"] = "Notes";
+}
+
+<h3>Your Note</h3>
+
+<form method="post">
+    <img src="~/test.PNG" />
+    <input type="text" asp-for="Note.Title" />
+    <textarea rows="10" cols="50" asp-for="Text"></textarea>
+</form>
+
+<a asp-page="/Profile">Back to Profile</a>
