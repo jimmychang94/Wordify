@@ -18,7 +18,7 @@ namespace Wordify.Pages
     /// This makes sure the user is logged in to view this page.
     /// It also allows us to manage the profile page from here rather than a controller.
     /// </summary>
-    [Authorize]
+    [Authorize (Policy = "MemberOnly")]
     public class ProfileModel : PageModel
     {
         private UserManager<ApplicationUser> _userManager;
@@ -108,6 +108,10 @@ namespace Wordify.Pages
             try
             {
                 Note note = _notes.GetNoteByID(id).Result;
+                if (!Notes.Contains(note))
+                {
+                    throw new Exception("You are not the owner of that note");
+                }
                 string blobText = _blob.GetText(note).Result;
                 Note = note;
                 Text = blobText;
@@ -116,13 +120,19 @@ namespace Wordify.Pages
             }
             catch (Exception)
             {
-                TempData["Error"] = "Something went wrong with the Post Note";
+                TempData["Error"] = "Something went wrong with accessing that note";
             }
         }
 
         public IActionResult OnPostDeleteNote(int id)
         {
+            var user = _userManager.GetUserAsync(User).Result;
             Note note = _notes.GetNoteByID(id).Result;
+            if (note.UserID != user.Id)
+            {
+                TempData["Error"] = "You are not the owner of that note";
+                return Page();
+            }
             _blob.DeleteBlob(note);
             _notes.DestroyNote(id);
             return RedirectToPage("/Profile");
@@ -142,14 +152,18 @@ namespace Wordify.Pages
             try
             {
                 Note note = _notes.GetNoteByID(id).Result;
+                if (!Notes.Contains(note))
+                {
+                    throw new Exception("You are not the owner of that note");
+                }
                 note.Title = Note.Title;
                 _notes.UpdateNote(note, id);
                 _blob.UpdateText(note, Text);
             }
             catch (Exception)
             {
-
-                throw;
+                TempData["Error"] = "You are not the owner of that note";
+                return Page();
             }
 
             return RedirectToPage();
