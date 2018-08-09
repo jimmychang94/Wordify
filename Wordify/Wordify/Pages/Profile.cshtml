@@ -53,3 +53,19 @@
         <li>@item.Title</li>
     }
 </ol>
+
+<table>
+    <tbody> 
+        @foreach (var item in Model.Notes)
+        { 
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
