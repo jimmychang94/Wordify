@@ -89,7 +89,7 @@ namespace Wordify.Pages
 
             await _signInManager.SignOutAsync();
             await _signInManager.SignInAsync(user, false);
-            return RedirectToPage("/Index");
+            return RedirectToPage();
         }
 
         public void OnPostNote(int id)
