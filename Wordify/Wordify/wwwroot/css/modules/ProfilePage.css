@@ -1,0 +1,60 @@
+﻿#profilepage {
+    position: relative;
+}
+
+    #profilepage h2 {
+        width: 9vw;
+        position: absolute;
+        right: 8.5vw;
+        top: 2vw;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-bottom: .5vw;
+        border-bottom: .2vw solid #222;
+    }
+
+    #profilepage #userForm {
+        position: absolute;
+        top: 5vw;
+        right: 5vw;
+    }
+
+    #profilepage #noteTable {
+        position: absolute;
+        left: 5vw;
+        width: 70vw;
+        text-align: center;
+    }
+
+    #profilepage table {
+        width: 100%;
+    }
+
+    #profilepage th, tr {
+        border-bottom: .2vw solid #222;
+        padding: .5vw;
+    }
+
+    #profilepage .delete {
+        background: #f4425f;
+    }
+
+        #profilepage .delete:hover {
+            background: #a82b40;
+        }
+
+
+
+    #profilepage #noteview #buttons{
+        position: absolute;
+        right: 12vw;
+        top: .5vw;
+    }
+
+    #profilepage .close {
+        background: #999;
+    }
+
+    #profilepage .close:hover {
+        background: #333;
+    }

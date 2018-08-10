@@ -5,25 +5,26 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <ul>
+<ul>
+    <li>
+        <a asp-controller="Account" asp-action="Logout">Logout</a>
+    </li>
+    @if (User.IsInRole(ApplicationRoles.Admin))
+    {
         <li>
-            <a asp-page="/Profile">Profile</a>
+            <a asp-page="/Admin">Dashboard</a>
         </li>
-        @if (User.IsInRole(ApplicationRoles.Admin))
-        {
-            <li>
-                <a asp-page="/Admin">Admin Dashboard</a>
-            </li>
-        }
-        <li>
-            <a asp-controller="Account" asp-action="Logout">Logout</a>
-        </li>
-    </ul>
+    }
+    <li>
+        <a asp-page="/Profile">Profile</a>
+    </li>
+
+</ul>
 }
 else
 {
     <ul>
-        <li><a asp-page="/Account/Register">Register</a></li>
         <li><a asp-page="/Account/Login">Log in</a></li>
+        <li><a asp-page="/Account/Register">Register</a></li>
     </ul>
 }

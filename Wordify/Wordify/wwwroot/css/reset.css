@@ -56,3 +56,16 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
+button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    outline: 0;
+    -webkit-appearance: none;
+}
+
+input[type="file"] {
+    display: none;
+}

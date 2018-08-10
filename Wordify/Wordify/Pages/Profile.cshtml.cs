@@ -45,10 +45,7 @@ namespace Wordify.Pages
         public List<Note> Notes { get; set; }
 
         [BindProperty]
-        public Note Note { get; set; }
-
-        [BindProperty]
-        public string Text { get; set; }
+        public NoteCardViewModel Ncvm { get; set; }
 
         public ProfileModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
             INote notes, IBlob blob)
@@ -113,8 +110,9 @@ namespace Wordify.Pages
                     throw new Exception("You are not the owner of that note");
                 }
                 string blobText = _blob.GetText(note).Result;
-                Note = note;
-                Text = blobText;
+                Ncvm.Note = note;
+                Ncvm.Text = blobText;
+                Ncvm.Title = note.Title;
                 byte[] blobImage = _blob.GetImage(note).Result;
                 ImageDisplayExtensions.DisplayImage(blobImage);
             }
@@ -156,9 +154,9 @@ namespace Wordify.Pages
                 {
                     throw new Exception("You are not the owner of that note");
                 }
-                note.Title = Note.Title;
+                note.Title = Ncvm.Title;
                 _notes.UpdateNote(note, id);
-                _blob.UpdateText(note, Text);
+                _blob.UpdateText(note, Ncvm.Text);
             }
             catch (Exception)
             {

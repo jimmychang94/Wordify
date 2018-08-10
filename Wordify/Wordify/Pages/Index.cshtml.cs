@@ -39,14 +39,10 @@ namespace Wordify.Pages
         public string FileName { get; set; }
 
         [BindProperty]
-        public string Title { get; set; }
-
-        [BindProperty]
         public IFormFile FormFile { get; set; }
 
-        public string ResponseString { get; set; }
-        public byte[] ByteData { get; set; }
-
+        [BindProperty]
+        public NoteCardViewModel Ncvm { get; set; }
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
             IConfiguration configuration, IBlob blob, INote note)
@@ -63,6 +59,10 @@ namespace Wordify.Pages
         /// </summary>
         public void OnGet()
         {
+            if(System.IO.File.Exists("wwwroot/test.PNG"))
+            {
+                System.IO.File.Delete("wwwroot/test.PNG");
+            }
         }
         
         /// <summary>
@@ -76,7 +76,7 @@ namespace Wordify.Pages
             }
             else
             {
-                TempData["Error"] = "No File Uploaded.";
+                TempData["Error"] = "Whoa whoa whoa. Select a file first.";
             }
         }
 
@@ -96,10 +96,14 @@ namespace Wordify.Pages
                     "Ocp-Apim-Subscription-Key", Configuration["CognitiveServices:subscriptionKey"]);
 
                 string uri = $"{Configuration["CognitiveServices:uriBase"]}?mode=Handwritten";
+
                 HttpResponseMessage response;
+
                 string operationLocation;
+
                 GetImageAsByteArray(formFile);
-                using (ByteArrayContent content = new ByteArrayContent(ByteData))
+
+                using (ByteArrayContent content = new ByteArrayContent(Ncvm.ByteData))
                 {
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
@@ -113,7 +117,7 @@ namespace Wordify.Pages
                 else
                 {
                     string errorString = await response.Content.ReadAsStringAsync();
-                    TempData["ErrorString"] = "Could not process image. Please try with a new image. Make sure that the image follows the requirements listed below.";
+                    TempData["Error"] = "Improper image format.";
                     return;
                 }
 
@@ -130,20 +134,20 @@ namespace Wordify.Pages
 
                 if (i == 10 && contentString.IndexOf("\"status\":\"Succeeded\"") == -1)
                 {
-                    Console.WriteLine("Timeout");
+                    TempData["Error"] = "Request timed-out. Try again later.";
                     return;
                 }
 
                 ResponseContent = JToken.Parse(contentString).ToString();
                 RootObject ImageText = JsonParse(contentString);
                 List<Line> Lines = FilteredJson(ImageText);
-                ResponseString = TextString(Lines);
-                ImageDisplayExtensions.DisplayImage(ByteData);
+                Ncvm.Text = TextString(Lines);
+                ImageDisplayExtensions.DisplayImage(Ncvm.ByteData);
 
             }
             catch (Exception)
             {
-                TempData["Error"] = "Something went wrong.";
+                TempData["Error"] = "Hmm.. Something went wrong.";
             }
         }
 
@@ -152,7 +156,7 @@ namespace Wordify.Pages
         /// SaveNoteAsync - Saves the current note into Note Database and Uploads Image and Response text to Blob storage.
         /// </summary>
         /// <returns></returns>
-        public async Task OnPostSaveNoteAsync([FromForm]byte[] byteData, [FromForm]string responseString, [FromForm]string title)
+        public async Task<IActionResult> OnPostSaveNoteAsync([FromForm]byte[] byteData, [FromForm]string text, [FromForm]string title)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -164,8 +168,9 @@ namespace Wordify.Pages
                 BlobLength = byteData.Length,
             };
 
-            await _blob.Upload(note, responseString, byteData);
+            await _blob.Upload(note, text, byteData);
             await _note.CreateNote(note);
+            return RedirectToPage();
         }
 
 
@@ -225,11 +230,11 @@ namespace Wordify.Pages
         /// <param name="formFile">from the front end input</param>
         public void GetImageAsByteArray(IFormFile formFile)
         {
-            ByteData = new byte[formFile.Length];
+            Ncvm.ByteData = new byte[formFile.Length];
             using (var ms = new MemoryStream())
             {
                 formFile.CopyTo(ms);
-                ByteData = ms.ToArray();
+                Ncvm.ByteData = ms.ToArray();
             }
         }
     }

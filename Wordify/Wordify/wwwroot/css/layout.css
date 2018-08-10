@@ -15,12 +15,13 @@ header {
     header ul {
         position: absolute;
         right: 5vw;
-        top: 2vw;
+        line-height: 6vw;
     }
 
-    header li{
+    header li {
         display: inline-block;
         float: right;
+        line-height: 6vw;
         padding: .5vw;
     }
 
@@ -50,12 +51,45 @@ footer {
         font-size: 3vw;
     }
 
-    footer #smallprint {
+    footer #tagline {
+        width: 10vw;
+        font-size: 1vw;
+        font-family: 'Open Sans', sans-serif;
+        text-align: center;
         position: absolute;
-        bottom: .2vw;
-        left: 40vw;
-        color: #444;
+        left: 5.5vw;
+        top: 8vw;
+    }
+
+    footer #smallprint {
+        font-family: 'Open Sans', sans-serif;   
+        position: absolute;
+        font-size: 1vw;
+        bottom: 3vw;
+        left: 1vw;
+        color: #555;
         width: 20vw;
         text-align: center;
     }
+
+#notecard {
+    position: relative;
+    width: 75vw;
+    background-color: white;
+    padding: 2.5vw 1vw 1vw 1vw; 
+    margin: auto;
+    border-radius: .5vw;
+    border: .2vw solid #222;
+}
+
+    #notecard #title {
+        text-align: center; 
+    }
+
+
+    #notecard img {
+        max-width: 40vw;
+        vertical-align: top;
+    }
+
 
