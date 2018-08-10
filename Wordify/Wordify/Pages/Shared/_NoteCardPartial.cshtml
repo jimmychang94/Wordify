@@ -1,0 +1,23 @@
+﻿@model NoteCardViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<section id="notecard">
+
+    <div id="title">
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <span>Title:</span>
+            <input type="text" value="@Model.Title" asp-for="@Model.Title" placeholder="Give Your Note a Title" />
+        }
+    </div>
+
+
+        <img src="~/test.PNG" alt="Your uploaded image."/>
+
+        <textarea rows="21" cols="55" asp-for="@Model.Text">@Model.Text</textarea>
+
+    <input type="hidden" asp-for="@Model.ByteData" />
+</section>

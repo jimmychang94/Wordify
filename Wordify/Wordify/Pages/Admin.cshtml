@@ -4,64 +4,72 @@
     ViewData["Title"] = "Admin";
 }
 
-<h2>Admin</h2>
 
-<h4>User Table</h4>
-<form method="post" asp-page-handler="Delete">
-    <table>
-        <thead>
-            <tr>
-                <th>UserName</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (ApplicationUser user in Model.Users)
-            {
+<section id="adminpage">
+
+    <form id="userreport" method="post" asp-page-handler="Delete">
+        <h4>User Report</h4>
+        <table>
+            <thead>
                 <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td><button type="submit" asp-page-handler="Delete" asp-route-id="@user.Id">Delete</button></td>
+                    <th>UserName</th>
+                    <th>Email</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</form>
-
-
-<h4>Notes Table</h4>
-<form method="post" asp-page-handler="DeleteNote">
-    <table>
-        <thead>
-            <tr>
-                <th>User</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (AdminViewModel avm in Model.AVMs)
-            {
-                <tr>
-                    <td>@avm.Note.Title</td>
-                    <td>@avm.UserName</td>
-                    <td><button type="submit" asp-page-handler="Note" asp-route-id="@avm.Note.ID">See Note</button></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</form>
-
-@if (Model.Note != null)
-{
-    <h3>Your Note</h3>
-
-    <form method="post" asp-page-handler="Delete">
-        <img src="~/test.PNG" />
-        <input type="text" value="@Model.Note.Title" asp-for="@Model.Note.Title" />
-        <textarea rows="10" cols="50" asp-for="@Model.Text">@Model.Text</textarea>
-        <button type="submit" asp-page-handler="DeleteNote" asp-route-id="@Model.Note.ID">Delete</button>
+            </thead>
+            <tbody>
+                @foreach (ApplicationUser user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td><button type="submit" asp-page-handler="Delete" asp-route-id="@user.Id">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </form>
-}
 
 
+    <form id="notereport" method="post" asp-page-handler="DeleteNote">
+        <h4>Activiy Feed</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>User Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AdminViewModel avm in Model.AVMs)
+                {
+                    <tr>
+                        <td>@avm.Note.Title</td>
+                        <td>@avm.UserName</td>
+                        <td><button type="submit" asp-page-handler="Note" asp-route-id="@avm.Note.ID">See Note</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+    @if (Model.Note != null)
+    {
+        <section id="notecard">
+            <form id="noteview" method="post" asp-page-handler="Delete">
+                <div id="title">
+                    <span>@Model.Note.Title</span>
+                </div>
+
+                <img src="~/test.PNG" alt="Your uploaded image." />
+                <textarea rows="21" cols="55" asp-for="@Model.Text">@Model.Text</textarea>
+
+                <div id="buttons">
+                    <button type="submit" asp-page-handler="DeleteNote" asp-route-id="@Model.Note.ID">Delete</button>
+                    <a class="close" asp-page="/Admin">Close</a>
+                </div>
+            </form>
+        </section>
+    }
+</section>

@@ -1,0 +1,83 @@
+﻿#homeUpload {
+    position: relative;
+}
+
+    #homeUpload #header {
+        position: absolute;
+        left: 5vw;
+        top: -4vw;
+    }
+
+        #homeUpload #header h2 {
+            display: inline-block;  
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding-bottom: .5vw;
+            border-bottom: .2vw solid #222;
+        }
+
+    #homeUpload #uploadform {
+       position: absolute;
+       left: 9vw;   
+    }
+
+    #homeUpload #instructions {
+        position: absolute;
+        left: 9vw;
+        top: 3vw;
+        font-size: .7rem;
+    }
+
+        #homeUpload #instructions p {
+            padding-bottom: .5vw;
+        }
+
+    #homeUpload #error {
+        width: 20vw;
+        position: absolute;
+        top: 2vw;
+        left: 40vw;
+        font-size: 2vw;
+        font-weight: bold;
+        color: #222;
+        text-align: center;
+    }
+
+.custom-file-upload {
+    padding: .2vw;
+    font-size: 1rem;
+    border-radius: 4px;
+    background: #16e689;
+    color: #fff;
+}
+    .custom-file-upload span{
+        font-size: 1rem;
+    }
+    .custom-file-upload:hover {
+        background: #20ad6e;
+    }
+
+    .custom-file-upload:active {
+        top: 0px;
+        box-shadow: 0px 0px 0px rgba( 15, 165, 60, 0.0 );
+        background: rgba( 20, 224, 133, 1 );
+    }
+
+#homeUpload #noteview #buttons {
+    position: absolute;
+    right: 12vw;
+    top: 1vw;
+}
+
+#homeUpload .close {
+    padding: .2vw;
+    top: 0;
+    font-size: 1rem;
+    border-radius: 4px; 
+    color: #fff;
+    background: #999;
+}
+
+    #homeUpload .close:hover {
+        background: #333;
+    }

@@ -8,15 +8,18 @@
     <link rel="stylesheet" href="~/css/base.css" />
     <link rel="stylesheet" href="~/css/layout.css" />
     <link rel="stylesheet" href="~/css/icons.css" />
-    <link rel="stylesheet" href="~/css/modules/" />
+    <link rel="stylesheet" href="~/css/modules/HomeUpload.css" />
+    <link rel="stylesheet" href="~/css/modules/LoginPage.css" />
+    <link rel="stylesheet" href="~/css/modules/RegisterPage.css" />
+    <link rel="stylesheet" href="~/css/modules/ProfilePage.css" />
+    <link rel="stylesheet" href="~/css/modules/AdminPage.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald|Pacifico" rel="stylesheet">
-
 </head>
 
 
 <body>
     <header>
-        <a asp-page="/Index"><span class="logo">Wordify</span></a>
+        <a asp-page="/Index"><h1 class="logo">Wordify</h1></a>
         <nav>
             @await Html.PartialAsync("_LoginPartial")
         </nav>
@@ -30,16 +33,9 @@
 
     <footer>
         <a asp-page="/Index" class="logo">Wordify</a>
-
         <div class="icon-Microsoft"></div>
-
-        <div id="creators">
-
-
-        </div>
-
-
-        <div id="smallprint">&copy; 2018 Home About Contact </div>
+        <div id="tagline">Utilizing Microsoft OCR Technology</div>
+        <div id="smallprint">&copy; 2018   Home   About   Contact</div>
     </footer>
 </body>
 </html>
