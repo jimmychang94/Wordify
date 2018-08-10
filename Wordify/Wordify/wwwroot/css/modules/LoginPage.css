@@ -1,0 +1,21 @@
+﻿#loginpage {
+    position: relative;
+}
+
+    #loginpage h2 {
+        width: 6vw;
+        position: absolute;
+        left: 40vw;
+        top: 0vw;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-bottom: .5vw;
+        border-bottom: .2vw solid #222;
+    }
+
+    #loginpage form {
+        position: absolute;
+        top: 3vw;  
+        left: 40vw;
+    }
+

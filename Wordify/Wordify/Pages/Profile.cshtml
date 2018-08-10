@@ -2,74 +2,103 @@
 @model ProfileModel
 @{
     ViewData["Title"] = "Profile Page";
+    var count = 1;
 }
 
-<h1>Your Profile</h1>
 
-<p>@TempData["Error"]</p>
+<section id="profilepage">
+    <h2>Your Profile</h2>
 
-<form method="post" asp-page-handler="User">
+    <p>@TempData["Error"]</p>
 
-    <div class="form-group row">
-        <h5 class="col-sm-2 offset-sm-1"><label asp-for="UserName" class="col-form-label"></label></h5>
-        <div class="col-sm-9">
-            <input asp-for="UserName" readonly="readonly" class="form-control" value="@Model.UserName" />
+    <form id="userForm" method="post" asp-page-handler="User">
+
+        <div>
+            <h5><label asp-for="UserName"></label></h5>
+            <div>
+                <input asp-for="UserName" readonly="readonly" value="@Model.UserName" />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <h5 class="col-sm-2 offset-sm-1"><label asp-for="FirstName" class="col-form-label"></label></h5>
-        <div class="col-sm-9">
-            <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+        <div>
+            <h5><label asp-for="FirstName"></label></h5>
+            <div>
+                <input asp-for="FirstName" value="@Model.FirstName" />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <h5 class="col-sm-2 offset-sm-1"><label asp-for="LastName" class="col-form-label"></label></h5>
-        <div class="col-sm-9">
-            <input asp-for="LastName" class="form-control" value="@Model.LastName" />
+        <div>
+            <h5><label asp-for="LastName"></label></h5>
+            <div>
+                <input asp-for="LastName" value="@Model.LastName" />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <h5 class="col-sm-2 offset-sm-1"><label asp-for="Bio" class="col-form-label"></label></h5>
-        <div class="col-sm-9">
-            <input asp-for="Bio" class="form-control" value="@Model.Bio" />
+        <div>
+            <h5><label asp-for="Bio"></label></h5>
+            <div>
+                <input asp-for="Bio" value="@Model.Bio" />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <h5 class="col-sm-2 offset-sm-1"><label asp-for="Email" class="col-form-label"></label></h5>
-        <div class="col-sm-9">
-            <input asp-for="Email" readonly="readonly" class="form-control" value="@Model.Email" />
+        <div>
+            <h5><label asp-for="Email"></label></h5>
+            <div>
+                <input asp-for="Email" readonly="readonly" value="@Model.Email" />
+            </div>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-9 offset-sm-3">
-            <input type="submit" class="btn btn-primary" value="Update User" />
-        </div>
-    </div>
-
-</form>
-
-
-<form method="post" asp-page-handler="Note">
-
-    <ol>
-        @foreach (var item in Model.Notes)
-        {
-            <li><button type="submit" asp-page-handler="Note" asp-route-id="@item.ID">@item.Title</button></li>
-        }
-    </ol>
-</form>
-
-
-@if(Model.Note != null)
-{
-    <h3>Your Note</h3>
-
-    <form method="post">
-        <img src="~/test.PNG" />
-        <input type="text" value="@Model.Note.Title" asp-for="@Model.Note.Title" />
-        <textarea rows="10" cols="50" asp-for="@Model.Text">@Model.Text</textarea>
-        <button type="submit" asp-page-handler="Update" asp-route-id="@Model.Note.ID">Update</button>
-        <button type="submit" asp-page-handler="DeleteNote" asp-route-id="@Model.Note.ID">Delete</button>
+        <input type="submit" value="Update Info" />
     </form>
-}
+
+
+
+    <section id="noteTable">
+        @if (Model.Notes.Count > 0)
+        {
+            <form method="post" asp-page-handler="Note">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Date Created</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Notes)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@item.Title</td>
+                                <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                <td><button type="submit" asp-page-handler="Note" asp-route-id="@item.ID">View</button></td>
+                                <td><button type="submit" class="delete" asp-page-handler="DeleteNote" asp-route-id="@item.ID">Delete</button></td>
+                            </tr>
+                            count++;
+                        }
+                    </tbody>
+
+                </table>
+            </form>
+        }
+        else
+        {
+            <p>You have no notes.</p>
+        }
+    </section>
+
+    
+    @if (Model.Ncvm != null)
+    {
+        <form id="noteview" method="post">
+
+            @await Html.PartialAsync("_NoteCardPartial", Model.Ncvm)
+
+            <div id="buttons">
+                <button type="submit" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Update</button>
+                <button type="submit" class="delete" asp-page-handler="DeleteNote" asp-route-id="@Model.Ncvm.Note.ID">Delete</button>
+                <button type="submit" class="close" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Close</button>
+            </div>
+        </form>
+    }
+
+</section>
