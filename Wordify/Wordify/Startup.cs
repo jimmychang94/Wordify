@@ -56,10 +56,10 @@ namespace Wordify
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDbProd")));
 
             services.AddDbContext<DataDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("WordifyDataDb")));
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyDataDbProd")));
 
             services.AddAuthorization(options =>
             {
