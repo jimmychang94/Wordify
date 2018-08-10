@@ -76,10 +76,11 @@ footer {
     position: relative;
     width: 75vw;
     background-color: white;
-    padding: 2.5vw 1vw 1vw 1vw; 
+    padding: 2.5vw 1vw 1vw 1vw;
     margin: auto;
     border-radius: .5vw;
     border: .2vw solid #222;
+    box-shadow:  1vw .5vw 2vw #444;
 }
 
     #notecard #title {
