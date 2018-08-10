@@ -11,6 +11,13 @@ using Wordify.Data;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
+using Wordify.Data.json;
+using System.Text;
+using Microsoft.AspNetCore.Http;
+using System.Drawing;
+using Wordify.Extensions;
+using Wordify.Models.Interfaces;
+using Wordify.Models;
 
 namespace Wordify.Pages
 {
@@ -18,39 +25,68 @@ namespace Wordify.Pages
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
-
+        private  IBlob _blob;
+        private INote _note;
         public static IConfiguration Configuration;
 
         [BindProperty]
-        public string imageFilePath { get; set; }
+        public string ImageFilePath { get; set; }
+
+        [BindProperty]
+        public string ResponseContent { get; set; }
+
+        [BindProperty]
+        public string FileName { get; set; }
+
+        [BindProperty]
+        public IFormFile FormFile { get; set; }
+
+        [BindProperty]
+        public NoteCardViewModel Ncvm { get; set; }
 
         public IndexModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IConfiguration configuration)
+            IConfiguration configuration, IBlob blob, INote note)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             Configuration = configuration;
+            _blob = blob;
+            _note = note;
         }
 
+        /// <summary>
+        /// OnGet - Runs on page Load
+        /// </summary>
         public void OnGet()
         {
-
-        }
-
-        public async void OnPost(string imageFilePath)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if(System.IO.File.Exists(imageFilePath))
+            if(System.IO.File.Exists("wwwroot/test.PNG"))
             {
-                ReadHandwrittenText(imageFilePath).Wait();
+                System.IO.File.Delete("wwwroot/test.PNG");
+            }
+        }
+        
+        /// <summary>
+        /// OnPost - Runs when Submit button is pressed
+        /// </summary>
+        public void OnPost()
+        {
+            if (FormFile != null)
+            {
+                ReadHandwrittenText(FormFile).Wait();
             }
             else
             {
-                // file does not exist
+                TempData["Error"] = "Whoa whoa whoa. Select a file first.";
             }
         }
 
-        public static async Task ReadHandwrittenText(string imageFilePath)
+
+        /// <summary>
+        /// ReadHandWrittenText - Takes in the uploaded image and, if able, sends it to the API to be converted.
+        /// </summary>
+        /// <param name="formFile">form from the front end</param>
+        /// <returns></returns>
+        public async Task ReadHandwrittenText(IFormFile formFile)
         {
             try
             {
@@ -59,17 +95,15 @@ namespace Wordify.Pages
                 client.DefaultRequestHeaders.Add(
                     "Ocp-Apim-Subscription-Key", Configuration["CognitiveServices:subscriptionKey"]);
 
-                string requestParameters = "mode=Handwritten";
-
-                string uri = $"{Configuration["CognitiveServices:uriBase"]}?{requestParameters}";
+                string uri = $"{Configuration["CognitiveServices:uriBase"]}?mode=Handwritten";
 
                 HttpResponseMessage response;
 
                 string operationLocation;
 
-                byte[] byteData = GetImageAsByteArray(imageFilePath);
+                GetImageAsByteArray(formFile);
 
-                using (ByteArrayContent content = new ByteArrayContent(byteData))
+                using (ByteArrayContent content = new ByteArrayContent(Ncvm.ByteData))
                 {
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
@@ -83,6 +117,7 @@ namespace Wordify.Pages
                 else
                 {
                     string errorString = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = "Improper image format.";
                     return;
                 }
 
@@ -99,26 +134,107 @@ namespace Wordify.Pages
 
                 if (i == 10 && contentString.IndexOf("\"status\":\"Succeeded\"") == -1)
                 {
-                    Console.WriteLine("Timeout");
+                    TempData["Error"] = "Request timed-out. Try again later.";
                     return;
                 }
 
-                // API request completed
-            
+                ResponseContent = JToken.Parse(contentString).ToString();
+                RootObject ImageText = JsonParse(contentString);
+                List<Line> Lines = FilteredJson(ImageText);
+                Ncvm.Text = TextString(Lines);
+                ImageDisplayExtensions.DisplayImage(Ncvm.ByteData);
+
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                TempData["Error"] = "Hmm.. Something went wrong.";
             }
         }
 
-        public static byte[] GetImageAsByteArray(string imageFilePath)
+
+        /// <summary>
+        /// SaveNoteAsync - Saves the current note into Note Database and Uploads Image and Response text to Blob storage.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> OnPostSaveNoteAsync([FromForm]byte[] byteData, [FromForm]string text, [FromForm]string title)
         {
-            using (FileStream fileStream =
-                new FileStream(imageFilePath, FileMode.Open, FileAccess.Read))
+            var user = await _userManager.GetUserAsync(User);
+
+            Note note = new Note()
             {
-                BinaryReader binaryReader = new BinaryReader(fileStream);
-                return binaryReader.ReadBytes((int)fileStream.Length);
+                UserID = user.Id,
+                Date = DateTime.Now,
+                Title = title,
+                BlobLength = byteData.Length,
+            };
+
+            await _blob.Upload(note, text, byteData);
+            await _note.CreateNote(note);
+            return RedirectToPage();
+        }
+
+
+        /// <summary>
+        /// JsonParse - Takes in the JSON string and deserialises it based on the RootObject.
+        /// </summary>
+        /// <param name="jsonString">the JSON string</param>
+        /// <returns>Deserialized root object</returns>
+        public static RootObject JsonParse(string jsonString)
+        {
+            RootObject ImageText = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(jsonString);
+            return ImageText;
+        }
+
+
+        /// <summary>
+        /// FilerteredJson - Filters JSON object into lines of text.
+        /// </summary>
+        /// <param name="ImagePath"></param>
+        /// <returns></returns>
+        public static List<Line> FilteredJson(RootObject ImagePath)
+        {
+            Convertedjson displayJson = new Convertedjson();
+
+            var lines = from l in ImagePath.recognitionResult.lines
+                        where l.text != null
+                        select l;
+
+            List<Line> text = lines.ToList();      
+            return text;
+        }
+
+
+        /// <summary>
+        /// TextString - Takes in the List of Lines taken from the JSON and uses string builder to 
+        ///     combine them into a single string.
+        /// </summary>
+        /// <param name="text"> The list of Lines found on the JSON.</param>
+        /// <returns> The combined lines as a string.</returns>
+        public static string TextString( List<Line> text)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var item in text)
+            {
+                sb.AppendLine(item.text);
+            }
+
+            return sb.ToString();
+        }
+
+
+        /// <summary>
+        /// GetImageAsByteArray - Takes in the image from the front end, and turns it into a byte array so it can 
+        ///     be stored and used.
+        /// </summary>
+        /// <param name="formFile">from the front end input</param>
+        public void GetImageAsByteArray(IFormFile formFile)
+        {
+            Ncvm.ByteData = new byte[formFile.Length];
+            using (var ms = new MemoryStream())
+            {
+                formFile.CopyTo(ms);
+                Ncvm.ByteData = ms.ToArray();
             }
         }
     }

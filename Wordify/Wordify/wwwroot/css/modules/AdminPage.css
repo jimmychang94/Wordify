@@ -1,0 +1,46 @@
+﻿#adminpage {
+    position: relative;
+}
+
+    #adminpage h4 {
+        text-align: center;
+    }
+
+    #adminpage #userreport {
+        position: absolute;
+        right: 5vw;
+        top: 2vw;
+    }
+
+        #adminpage #userreport table {
+            width: 40vw;
+        }
+
+        #adminpage #notereport {
+            position: absolute;
+            left: 5vw;
+            top: -2vw;
+        }
+
+            #adminpage #notereport table {
+                width:40vw;
+            }
+
+#adminpage #noteview #buttons {
+    position: absolute;
+    right: 3vw;
+    top: 1vw;
+}
+
+#adminpage .close {
+    padding: .2vw;
+    top: 0;
+    font-size: 1rem;
+    border-radius: 4px;
+    color: #fff;
+    background: #999;
+}
+
+    #adminpage.close:hover {
+        background: #333;
+    }

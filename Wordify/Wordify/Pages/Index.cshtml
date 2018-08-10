@@ -1,13 +1,50 @@
 ﻿@page
 @model IndexModel
-
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Home page";
 }
-<h1>Upload an Image</h1>
-<form method="post">
-    <label ></label>
-    <input type="text" asp-for="imageFilePath" placeholder="Image Url"/>
-    <button type="submit">Upload</button>
-</form>
+
+<section id="homeUpload">
+
+    <div id="header">
+        <span class="icon-arrow-right"></span>
+        <h2>Upload an Image</h2>
+    </div>
+
+    <form id="uploadform" method="post" enctype="multipart/form-data">
+        <label for="file-upload" class="custom-file-upload"><span class="icon-upload"></span>Browse</label>
+        <input type="file" id="file-upload" asp-for="FormFile" />
+        <button type="submit"> Upload </button>
+    </form>
+
+    <div id="instructions">
+        <p>Select a jpg, png, or bmp image type</p>
+        <p>40x40 min, 3200x3200 max</p>
+        <p>4MB's or smaller</p>
+    </div>
+
+    <div id="error">
+        <p>@TempData["Error"]</p>
+    </div>
+
+
+
+
+    @if (Model.Ncvm != null && System.IO.File.Exists("wwwroot/test.PNG"))
+    {
+        <form id="noteview" method="post" asp-page-handler="SaveNote">
+
+            @await Html.PartialAsync("_NoteCardPartial", Model.Ncvm)
+
+            <div id="buttons">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <button type="submit">Save</button>
+                }
+                <a class="close" asp-page="/Index">Close</a>
+            </div>
+        </form>
+    }
+</section>

@@ -1,0 +1,96 @@
+﻿/**
+    Header
+*/
+header {
+    position: relative;
+}
+    header .logo {
+        position: absolute;
+        left: 5vw;
+        top: 2vw;
+        font-size:  4vw;
+        line-height: 2vw;
+    }
+
+    header ul {
+        position: absolute;
+        right: 5vw;
+        line-height: 6vw;
+    }
+
+    header li {
+        display: inline-block;
+        float: right;
+        line-height: 6vw;
+        padding: .5vw;
+    }
+
+        header li a {
+            font-family: 'Oswald', sans-serif;
+            color: white;
+        }
+
+
+/**
+    Footer
+*/
+footer {
+    position: relative;
+}
+    footer .logo{
+        position: absolute;
+        font-size: 2vw;
+        left: 5vw;
+        top: 5vw;
+    }
+
+    footer .icon-Microsoft {
+        position: absolute;
+        left: 13vw;
+        top: 4.5vw;
+        font-size: 3vw;
+    }
+
+    footer #tagline {
+        width: 10vw;
+        font-size: 1vw;
+        font-family: 'Open Sans', sans-serif;
+        text-align: center;
+        position: absolute;
+        left: 5.5vw;
+        top: 8vw;
+    }
+
+    footer #smallprint {
+        font-family: 'Open Sans', sans-serif;   
+        position: absolute;
+        font-size: 1vw;
+        bottom: 3vw;
+        left: 1vw;
+        color: #555;
+        width: 20vw;
+        text-align: center;
+    }
+
+#notecard {
+    position: relative;
+    width: 75vw;
+    background-color: white;
+    padding: 2.5vw 1vw 1vw 1vw;
+    margin: auto;
+    border-radius: .5vw;
+    border: .2vw solid #222;
+    box-shadow:  1vw .5vw 2vw #444;
+}
+
+    #notecard #title {
+        text-align: center; 
+    }
+
+
+    #notecard img {
+        max-width: 40vw;
+        vertical-align: top;
+    }
+
+

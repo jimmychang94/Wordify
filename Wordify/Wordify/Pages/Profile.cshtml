@@ -1,0 +1,104 @@
+﻿@page
+@model ProfileModel
+@{
+    ViewData["Title"] = "Profile Page";
+    var count = 1;
+}
+
+
+<section id="profilepage">
+    <h2>Your Profile</h2>
+
+    <p>@TempData["Error"]</p>
+
+    <form id="userForm" method="post" asp-page-handler="User">
+
+        <div>
+            <h5><label asp-for="UserName"></label></h5>
+            <div>
+                <input asp-for="UserName" readonly="readonly" value="@Model.UserName" />
+            </div>
+        </div>
+        <div>
+            <h5><label asp-for="FirstName"></label></h5>
+            <div>
+                <input asp-for="FirstName" value="@Model.FirstName" />
+            </div>
+        </div>
+        <div>
+            <h5><label asp-for="LastName"></label></h5>
+            <div>
+                <input asp-for="LastName" value="@Model.LastName" />
+            </div>
+        </div>
+        <div>
+            <h5><label asp-for="Bio"></label></h5>
+            <div>
+                <input asp-for="Bio" value="@Model.Bio" />
+            </div>
+        </div>
+        <div>
+            <h5><label asp-for="Email"></label></h5>
+            <div>
+                <input asp-for="Email" readonly="readonly" value="@Model.Email" />
+            </div>
+        </div>
+
+        <input type="submit" value="Update Info" />
+    </form>
+
+
+
+    <section id="noteTable">
+        @if (Model.Notes.Count > 0)
+        {
+            <form method="post" asp-page-handler="Note">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Date Created</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Notes)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@item.Title</td>
+                                <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                <td><button type="submit" asp-page-handler="Note" asp-route-id="@item.ID">View</button></td>
+                                <td><button type="submit" class="delete" asp-page-handler="DeleteNote" asp-route-id="@item.ID">Delete</button></td>
+                            </tr>
+                            count++;
+                        }
+                    </tbody>
+
+                </table>
+            </form>
+        }
+        else
+        {
+            <p>You have no notes.</p>
+        }
+    </section>
+
+    
+    @if (Model.Ncvm != null)
+    {
+        <form id="noteview" method="post">
+
+            @await Html.PartialAsync("_NoteCardPartial", Model.Ncvm)
+
+            <div id="buttons">
+                <button type="submit" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Update</button>
+                <button type="submit" class="delete" asp-page-handler="DeleteNote" asp-route-id="@Model.Ncvm.Note.ID">Delete</button>
+                <button type="submit" class="close" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Close</button>
+            </div>
+        </form>
+    }
+
+</section>

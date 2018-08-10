@@ -1,0 +1,20 @@
+﻿#registerpage {
+    position: relative;
+}
+
+    #registerpage h2 {
+        width: 6vw;
+        position: absolute;
+        left: 22vw;
+        top: -2vw;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-bottom: .5vw;
+        border-bottom: .2vw solid #222;
+    }
+
+    #registerpage form {
+        position: absolute;
+        top: 1vw;
+        left: 22vw;
+    }

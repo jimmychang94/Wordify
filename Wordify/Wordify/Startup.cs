@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wordify.Data;
+using Wordify.Models;
+using Wordify.Models.Interfaces;
 using Wordify.Services;
 
 namespace Wordify
@@ -54,9 +56,21 @@ namespace Wordify
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDb")));
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyUserDbProd")));
+
+            services.AddDbContext<DataDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WordifyDataDbProd")));
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole(ApplicationRoles.Admin));
+                options.AddPolicy("MemberOnly", policy => policy.RequireRole(ApplicationRoles.Member));
+            });
 
             services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddSingleton<IBlob, DevBlob>();
+            services.AddScoped<INote, DevNote>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
