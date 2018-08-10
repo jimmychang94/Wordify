@@ -21,8 +21,7 @@ namespace RazorPagesTestProject1
         public async void CreateNoteTest()
         {
             var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
-               .UseInMemoryDatabase(Guid.NewGuid().ToString());
-
+                                .UseInMemoryDatabase("thatdb");
 
             using (var db = new DataDbContext(optionBuilder.Options))
             {
@@ -41,8 +40,7 @@ namespace RazorPagesTestProject1
         public async void DestroyNoteTest()
         {
             var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
-    .UseInMemoryDatabase(Guid.NewGuid().ToString());
-
+                                .UseInMemoryDatabase("thisdb");
 
             using (var db = new DataDbContext(optionBuilder.Options))
             {
@@ -51,7 +49,7 @@ namespace RazorPagesTestProject1
 
                 await _note.CreateNote(note);
 
-                 _note.DestroyNote(1);
+                _note.DestroyNote(note.ID);
                 List<Note> notes = await db.Notes.ToListAsync();
 
 
@@ -63,7 +61,7 @@ namespace RazorPagesTestProject1
         public async void UpdateNoteTest()
         {
             var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
-    .UseInMemoryDatabase(Guid.NewGuid().ToString());
+                                .UseInMemoryDatabase("mydb");
 
 
             using (var db = new DataDbContext(optionBuilder.Options))
@@ -80,30 +78,109 @@ namespace RazorPagesTestProject1
                 {
                     Title = "Bye"
                 };
-                 _note.UpdateNote(newNote, 1);
+                _note.UpdateNote(newNote, note.ID);
                 List<Note> notes = await db.Notes.ToListAsync();
 
                 Assert.Equal("Bye", notes[0].Title);
             }
         }
 
-
         [Fact]
-        public void GetNotesByUserIDTest()
+        public async void GetNotesByUserIDTest()
         {
+            var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
+                                .UseInMemoryDatabase("yourdb");
 
+            using (var db = new DataDbContext(optionBuilder.Options))
+            {
+                DevNote _note = new DevNote(db, Configuration);
+                Note note = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note2 = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note3 = new Note()
+                {
+                    UserID = "23423"
+                };
+                await _note.CreateNote(note);
+                await _note.CreateNote(note2);
+                await _note.CreateNote(note3);
+
+                List<Note> notesUser  = await _note.GetNotesByUserID("UserID");
+
+                Assert.Equal(2, notesUser.Count);
+            }
         }
 
         [Fact]
-        public void GetAllNotesTest()
+        public async void GetAllNotesTest()
         {
+            var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
+                            .UseInMemoryDatabase("yourdb");
 
+            using (var db = new DataDbContext(optionBuilder.Options))
+            {
+                DevNote _note = new DevNote(db, Configuration);
+                Note note = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note2 = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note3 = new Note()
+                {
+                    UserID = "23423"
+                };
+
+                foreach (var item in db.Notes)
+                {
+                     _note.DestroyNote(item.ID);
+                }
+
+                await _note.CreateNote(note);
+                await _note.CreateNote(note2);
+                await _note.CreateNote(note3);
+
+                List<Note> notesUser = await _note.GetAllNotes();
+
+                Assert.Equal(3, notesUser.Count);
+            }
         }
 
         [Fact]
-        public void GetNoteByIDTest()
+        public async void GetNoteByIDTest()
         {
+            var optionBuilder = new DbContextOptionsBuilder<DataDbContext>()
+                          .UseInMemoryDatabase("thedb");
+            using (var db = new DataDbContext(optionBuilder.Options))
+            {
+                DevNote _note = new DevNote(db, Configuration);
+                Note note = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note2 = new Note()
+                {
+                    UserID = "UserID"
+                };
+                Note note3 = new Note()
+                {
+                    UserID = "23423"
+                };
+                await _note.CreateNote(note);
+                await _note.CreateNote(note2);
+                await _note.CreateNote(note3);
 
+                Note notesUser = await _note.GetNoteByID(note2.ID);
+
+                Assert.Equal(note2.ID, notesUser.ID);
+            }
         }
     }
 }
