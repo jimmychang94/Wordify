@@ -18,6 +18,7 @@ You can edit and adjust it as you see fit, and save the image and text into our 
 
 ## Database Schema
 ![Database Schema](Wordify/Assets/WordifySchema.PNG)  
+Our Schema includes the tables that we will be using in the next stage of our application. Currently only the User and Notes tables are being used. Users and Notes are being stored in their own SQL Databases, while the Images and their Text are stored in Azure Blob Storage. The User table stores confirms the current users identity, and is the reference point for the Notes. The Notes table stores references to the User who made it, and the Image and Text stored in the Blob Storage. Additional information includes a Title for the Note and the Date when the Note was created.  
 
 ## Happy Path
 
