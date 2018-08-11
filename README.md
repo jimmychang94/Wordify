@@ -2,7 +2,7 @@
 ![Wordify](https://imgur.com/rc8Wz56.png)
 
 # Introduction 
- Handwritting is still very useful in today's technology centric life style. Give syou the freedom to write where you want
+ Handwritting is still very useful in today's technology centric life style. Gives you the freedom to write where you want
 on a page and easily switch where on the page you want your next thought to go, and there'sthe benifit of the muscle memory you gain
 from writing the characters vs just clicking buttons. But paper documents can get cluttered, take up real space, and be frustrating to organize.
  Wordify is an application designed to help users convert handwritten documents, be it class notes, 
