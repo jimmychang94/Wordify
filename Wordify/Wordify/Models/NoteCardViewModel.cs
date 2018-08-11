@@ -9,9 +9,9 @@ namespace Wordify.Models
     {
         public Note Note { get; set; }
 
-        public string Text { get; set; }
+        public string Text { get; set; } // Used to populate the textarea
 
-        public byte[] ByteData { get; set; }
+        public byte[] ByteData { get; set; } // Used to display the image
 
         public string Title { get; set; }
     }
