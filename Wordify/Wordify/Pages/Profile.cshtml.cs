@@ -56,6 +56,10 @@ namespace Wordify.Pages
             _blob = blob;
         }
 
+        /// <summary>
+        /// Launch users profile page
+        /// </summary>
+        /// <returns>profile page</returns>
         public async Task<IActionResult> OnGet()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -69,6 +73,10 @@ namespace Wordify.Pages
             return Page();
         }
 
+        /// <summary>
+        /// Update user's own account info
+        /// </summary>
+        /// <returns>relaunch the page</returns>
         public async Task<IActionResult> OnPostUser()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -89,9 +97,13 @@ namespace Wordify.Pages
 
             await _signInManager.SignOutAsync();
             await _signInManager.SignInAsync(user, false);
-            return RedirectToPage("/Index");
+            return RedirectToPage();
         }
 
+        /// <summary>
+        /// User views one of their notes based on its ID
+        /// </summary>
+        /// <param name="id">ID of note the user wants to view</param>
         public void OnPostNote(int id)
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -122,6 +134,12 @@ namespace Wordify.Pages
             }
         }
 
+
+        /// <summary>
+        /// User deletes their note based on the notes ID
+        /// </summary>
+        /// <param name="id">ID of not to be deleted</param>
+        /// <returns>profile page with one less note, or error</returns>
         public IActionResult OnPostDeleteNote(int id)
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -136,7 +154,11 @@ namespace Wordify.Pages
             return RedirectToPage("/Profile");
         }
 
-
+        /// <summary>
+        /// Response to user updating their note
+        /// </summary>
+        /// <param name="id">ID of note the user wants to update</param>
+        /// <returns>page with updated note or error</returns>
         public IActionResult OnPostUpdate(int id)
         {
             var user = _userManager.GetUserAsync(User).Result;

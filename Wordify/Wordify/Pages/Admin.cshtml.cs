@@ -33,6 +33,7 @@ namespace Wordify.Pages
         [BindProperty]
         public string Text { get; set; }
 
+
         public AdminModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
             INote note, IBlob blob)
         {
@@ -43,6 +44,7 @@ namespace Wordify.Pages
             AVMs = new List<AdminViewModel>();
         }
 
+       
         public void OnGet()
         {
             Users = _userManager.Users.ToList();
@@ -57,7 +59,11 @@ namespace Wordify.Pages
                 });
             }
         }
-
+        /// <summary>
+        /// based on a users ID, an admin can remove them from the database
+        /// </summary>
+        /// <param name="id">users ID</param>
+        /// <returns>admin page with one less user</returns>
         public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -65,6 +71,11 @@ namespace Wordify.Pages
             return RedirectToPage("/Admin");
         }
 
+        /// <summary>
+        /// delete a note based on its ID
+        /// </summary>
+        /// <param name="id">ID of note to be delted</param>
+        /// <returns>admin page</returns>
         public IActionResult OnPostDeleteNote(int id)
         {
             Note note = _note.GetNoteByID(id).Result;
@@ -73,6 +84,10 @@ namespace Wordify.Pages
             return RedirectToPage("/Admin");
         }
 
+        /// <summary>
+        /// post a note
+        /// </summary>
+        /// <param name="id">ID of note</param>
         public void OnPostNote(int id)
         {
             try
