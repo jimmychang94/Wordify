@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Wordify.Data;
 using Wordify.Models;
 using Wordify.Models.Interfaces;
-using Wordify.Services;
 
 namespace Wordify
 {
@@ -66,8 +65,6 @@ namespace Wordify
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole(ApplicationRoles.Admin));
                 options.AddPolicy("MemberOnly", policy => policy.RequireRole(ApplicationRoles.Member));
             });
-
-            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSingleton<IBlob, DevBlob>();
             services.AddScoped<INote, DevNote>();

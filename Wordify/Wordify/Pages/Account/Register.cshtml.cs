@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Wordify.Data;
-using Wordify.Services;
 
 namespace Wordify.Pages.Account
 {
@@ -19,7 +18,6 @@ namespace Wordify.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IEmailSender _emailSender;
 
         public IConfiguration Configuration { get; }
 
@@ -27,13 +25,11 @@ namespace Wordify.Pages.Account
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            IEmailSender emailSender,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
             Configuration = configuration;
         }
 
@@ -123,10 +119,6 @@ namespace Wordify.Pages.Account
                         await _userManager.AddToRoleAsync(user, ApplicationRoles.Admin);
                     }
                     await _userManager.AddToRoleAsync(user, ApplicationRoles.Member);
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(Input.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     if (await _userManager.IsInRoleAsync(user, ApplicationRoles.Admin))
