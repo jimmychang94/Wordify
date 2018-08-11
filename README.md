@@ -10,13 +10,14 @@ old family recipes, you name it. With this app you can take a photo of your docu
 You can edit and adjust it as you see fit, and save the image and text into our database where it is easily organized and referencable for the users convenience. 
 
 
-## Data Schema 
-![Data Schema](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifySchema.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
-
+## Data Flow 
+![Data Flow](Wordify/Assets/WordifyDataFlow.PNG)  
 
 ## Wireframe
-![Wireframe](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifyWireframe.jpg&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
+![Wireframe](Wordify/Assets/WordifyWireframe.jpg)  
 
+## Database Schema
+![Database Schema](Wordify/Assets/WordifySchema.PNG)  
 
 ## Happy Path
 
