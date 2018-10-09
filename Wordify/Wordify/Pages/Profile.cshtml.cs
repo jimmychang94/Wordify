@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -26,19 +27,19 @@ namespace Wordify.Pages
         private INote _notes;
         private IBlob _blob;
 
-        [BindProperty]
-        public string FirstName { get; set; }
-
-        [BindProperty]
-        public string LastName { get; set; }
-
-        [BindProperty]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [BindProperty]
+        [Display(Name = "User Name")]
         public string UserName { get; set; }
 
-        [BindProperty]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+        
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Bio")]
         public string Bio { get; set; }
 
         [BindProperty]
@@ -186,6 +187,11 @@ namespace Wordify.Pages
                 return Page();
             }
 
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostClose()
+        {
             return RedirectToPage();
         }
     }
