@@ -2,7 +2,7 @@
 ![Wordify](https://imgur.com/rc8Wz56.png)
 
 # Introduction 
- Handwritting is still very useful in today's technology centric life style. Give syou the freedom to write where you want
+ Handwritting is still very useful in today's technology centric life style. Gives you the freedom to write where you want
 on a page and easily switch where on the page you want your next thought to go, and there'sthe benifit of the muscle memory you gain
 from writing the characters vs just clicking buttons. But paper documents can get cluttered, take up real space, and be frustrating to organize.
  Wordify is an application designed to help users convert handwritten documents, be it class notes, 
@@ -10,13 +10,15 @@ old family recipes, you name it. With this app you can take a photo of your docu
 You can edit and adjust it as you see fit, and save the image and text into our database where it is easily organized and referencable for the users convenience. 
 
 
-## Data Schema 
-![Data Schema](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifySchema.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
-
+## Data Flow 
+![Data Flow](Wordify/Assets/WordifyDataFlow.PNG)  
 
 ## Wireframe
-![Wireframe](https://wordify.visualstudio.com/eb4a1c8b-2104-40f7-91dd-03c2211d0423/_apis/git/repositories/bb1bf895-d7de-4fad-b321-20e72f5d3208/Items?path=%2FAssets%2FWordifyWireframe.jpg&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=Staging&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1)
+![Wireframe](Wordify/Assets/WordifyWireframe.jpg)  
 
+## Database Schema
+![Database Schema](Wordify/Assets/WordifySchema.PNG)  
+Our Schema includes the tables that we will be using in the next stage of our application. Currently only the User and Notes tables are being used. Users and Notes are being stored in their own SQL Databases, while the Images and their Text are stored in Azure Blob Storage. The User table stores confirms the current users identity, and is the reference point for the Notes. The Notes table stores references to the User who made it, and the Image and Text stored in the Blob Storage. Additional information includes a Title for the Note and the Date when the Note was created.  
 
 ## Happy Path
 
