@@ -33,6 +33,9 @@ namespace Wordify.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
+        /// <summary>
+        /// This holds the email, password info, and allows for that to be Remembered when returning to the page. 
+        /// </summary>
         public class InputModel
         {
             [Required]

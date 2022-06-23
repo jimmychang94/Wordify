@@ -20,6 +20,12 @@
             </div>
         </div>
         <div>
+            <h5><label asp-for="Email"></label></h5>
+            <div>
+                <input asp-for="Email" readonly="readonly" value="@Model.Email" />
+            </div>
+        </div>
+        <div>
             <h5><label asp-for="FirstName"></label></h5>
             <div>
                 <input asp-for="FirstName" value="@Model.FirstName" />
@@ -37,12 +43,7 @@
                 <input asp-for="Bio" value="@Model.Bio" />
             </div>
         </div>
-        <div>
-            <h5><label asp-for="Email"></label></h5>
-            <div>
-                <input asp-for="Email" readonly="readonly" value="@Model.Email" />
-            </div>
-        </div>
+
 
         <button type="submit">Update Info</button>
     </form>
@@ -96,7 +97,7 @@
             <div id="buttons">
                 <button type="submit" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Update</button>
                 <button type="submit" class="delete" asp-page-handler="DeleteNote" asp-route-id="@Model.Ncvm.Note.ID">Delete</button>
-                <button type="submit" class="close" asp-page-handler="Update" asp-route-id="@Model.Ncvm.Note.ID">Close</button>
+                <button type="submit" class="close" asp-page-handler="Close">Close</button>
             </div>
         </form>
     }
